@@ -112,7 +112,7 @@
 	var particles = [];
 
 	//electrons
-	for (var i = 0; i <30; i++)
+	for (var i = 0; i <20; i++)
 	{
 		var p = new Particle();
 		p.size = Math.floor((Math.random() * 10) + 7);
@@ -127,21 +127,6 @@
 		particles.push(p);
 	}
 
-	//protons
-	for (var i = 0; i < 30; i++)
-	{
-		var p = new Particle();
-		p.size = Math.floor((Math.random() * 7) + 4);
-		p.mass = p.size;
-		p.color = 0xff0000;
-		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
-		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
-		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
-		p.name = "Proton";
-		p.interactions = [{name:"repel", interacts_with: "Proton", direction: 1, range: 10* p.size, force:10},
-						  {name:"attract", interacts_with: "Electron", direction: -1, range: 10*p.size, force:10}];
-		particles.push(p);
-	}
 
 	// Listen for animate update
 	app.ticker.add(function(delta) {
