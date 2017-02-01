@@ -17,7 +17,7 @@
 	var canvas_size_y = 600;
 	var particle_id_counter = 0;
 
-	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0x87cefa});
+	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
 
 	var graphics = new PIXI.Graphics();
@@ -43,7 +43,7 @@
 	Particle.prototype.draw = function(graphics){
 		// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
 		graphics.lineStyle(0);
-		graphics.beginFill(this.color, 0.5);
+		graphics.beginFill(this.color, 0.6);
 		graphics.drawCircle(this.x, this.y, this.mass);
 		graphics.endFill();
 
@@ -121,8 +121,7 @@
 						
 						var distance_boundaries = this.getDistanceBounderies(other_particles[j]);
 						var distance_center = this.getDistanceCenter(other_particles[j]);
-						if(distance_boundaries < 0 && this.interactions[l].direction < 0){
-							//just bounce if they are attracting
+						if(distance_boundaries < 0){
 							//console.log("collision");
 							this.elasticBounce(other_particles[j]);
 						}
@@ -194,12 +193,12 @@
 	// particles.push(p);
 
 	//electrons
-	for (var i = 0; i <30; i++)
+	for (var i = 0; i <40; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 7) + 4;
+		p.size = (Math.random() * 4) + 3;
 		p.mass = p.size;
-		p.color = 0xffffff;
+		p.color = 0x0000ff;
 		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
@@ -209,10 +208,10 @@
 		particles.push(p);
 	}
 
-	for (var i = 0; i < 30; i++)
+	for (var i = 0; i < 60; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 7) + 4;
+		p.size = (Math.random() * 4) + 3;
 		p.mass = p.size;
 		p.color = 0xff0000;
 		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
@@ -224,6 +223,44 @@
 		particles.push(p);
 	}
 
+	for (var i = 0; i < 10; i++)
+	{
+		var p = new Particle();
+		p.size = (Math.random() * 3) + 2;
+		p.mass = p.size;
+		p.color = 0x000000;
+		p.elasticity = 1;
+		p.friction = 0.0001;
+		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
+		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
+		p.vel = [10,10];
+		p.name = "Bullet";
+		//just bounce against everything
+		p.interactions = [{name:"repel", interacts_with: "Proton", direction: 1, range: p.size-1, force:10},
+						  {name:"repel", interacts_with: "Electron", direction: 1, range: p.size-1, force:10},
+						  {name:"repel", interacts_with: "Bullet", direction: 1, range: p.size-1, force:10}];
+		particles.push(p);
+	}
+
+	for (var i = 0; i < 10; i++)
+	{
+		var p = new Particle();
+		p.size = (Math.random() * 3) + 2;
+		p.mass = p.size;
+		p.color = 0x00ff00;
+		p.elasticity = 0.1;
+		p.friction = 0.0001;
+		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
+		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
+		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
+		p.name = "Sticky";
+		//just attatch to everything
+		p.interactions = [{name:"attract", interacts_with: "Proton", direction: -1, range: p.size+1, force:10},
+						  {name:"attract", interacts_with: "Electron", direction: -1, range: p.size+1, force:10},
+						  {name:"attract", interacts_with: "Bullet", direction: -1, range: p.size+1, force:10},
+						  {name:"attract", interacts_with: "Sticky", direction: -1, range: p.size+1, force:10}];
+		particles.push(p);
+	}
 	// Listen for animate update
 	app.ticker.add(function(delta) {
 		graphics.clear();
