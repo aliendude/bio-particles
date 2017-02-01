@@ -13,6 +13,10 @@
 		if(res <= 0.5) return -1;
 	}
 
+	Array.prototype.diff = function(a) {
+	    return this.filter(function(i) {return a.indexOf(i) < 0;});
+	};
+
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
 	var n_particles = 3;
@@ -83,30 +87,60 @@
 		return distance;
 	};
 
-
-	function elastic_bounce(p1, p2) {
+	Particle.prototype.elasticBounce = function(p2) {
 		//ellastic newtonian collision
-	    var dx = p2.x-p1.x;
-	    var dy = p2.y-p1.y;
+	    var dx = this.x-p2.x;
+	    var dy = this.y-p2.y;
 	    var collisionision_angle = Math.atan2(dy, dx);
-	    var magnitude_1 = Math.sqrt(p1.vel[0]*p1.vel[0]+p1.vel[1]*p1.vel[1]);
+	    var magnitude_1 = Math.sqrt(this.vel[0]*this.vel[0]+this.vel[1]*this.vel[1]);
 	    var magnitude_2 = Math.sqrt(p2.vel[0]*p2.vel[0]+p2.vel[1]*p2.vel[1]);
-	    var direction_1 = Math.atan2(p1.vel[1], p1.vel[0]);
+	    var direction_1 = Math.atan2(this.vel[1], this.vel[0]);
 	    var direction_2 = Math.atan2(p2.vel[1], p2.vel[0]);
 	    var new_xspeed_1 = magnitude_1*Math.cos(direction_1-collisionision_angle);
 	    var new_yspeed_1 = magnitude_1*Math.sin(direction_1-collisionision_angle);
 	    var new_xspeed_2 = magnitude_2*Math.cos(direction_2-collisionision_angle);
 	    var new_yspeed_2 = magnitude_2*Math.sin(direction_2-collisionision_angle);
-	    var final_xspeed_1 = ((p1.mass-p2.mass)*new_xspeed_1+(p2.mass+p2.mass)*new_xspeed_2)/(p1.mass+p2.mass);
-	    var final_xspeed_2 = ((p1.mass+p1.mass)*new_xspeed_1+(p2.mass-p1.mass)*new_xspeed_2)/(p1.mass+p2.mass);
+	    var final_xspeed_1 = ((this.mass-p2.mass)*new_xspeed_1+(p2.mass+p2.mass)*new_xspeed_2)/(this.mass+p2.mass);
+	    var final_xspeed_2 = ((this.mass+this.mass)*new_xspeed_1+(p2.mass-this.mass)*new_xspeed_2)/(this.mass+p2.mass);
 	    var final_yspeed_1 = new_yspeed_1;
 	    var final_yspeed_2 = new_yspeed_2;
-	    p1.vel[0] = p1.elasticity*(Math.cos(collisionision_angle)*final_xspeed_1+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_1);
-	    p1.vel[1] = p1.elasticity*(Math.sin(collisionision_angle)*final_xspeed_1+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_1);
+	    this.vel[0] = this.elasticity*(Math.cos(collisionision_angle)*final_xspeed_1+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_1);
+	    this.vel[1] = this.elasticity*(Math.sin(collisionision_angle)*final_xspeed_1+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_1);
 	    p2.vel[0] = p2.elasticity*(Math.cos(collisionision_angle)*final_xspeed_2+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_2);
 	    p2.vel[1] = p2.elasticity*(Math.sin(collisionision_angle)*final_xspeed_2+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_2);
 	}
 
+	Particle.prototype.processCollisions = function(other_particles) {
+		for (var j = 0; j < other_particles.length; j++)
+		{
+			//check all interactions
+			for (var l = 0; l < this.interactions.length; l++)
+			{
+				//compare particle names to see if there's an interaction
+				if(this.interactions[l].interacts_with == other_particles[j].name){
+					
+					var distance_boundaries = this.getDistanceBounderies(other_particles[j]);
+					var distance_center = this.getDistanceCenter(other_particles[j]);
+					if(distance_boundaries < 0 && this.interactions[l].direction < 0){
+						//just bounce if they are attracting
+						//console.log("collision");
+						this.elasticBounce(other_particles[j]);
+					}
+					else if( distance_center < this.interactions[l].range )
+					{
+						//in range or interaction
+						//based on newton's gravitation law
+						var force = this.interactions[l].direction * this.interactions[l].force * this.mass*other_particles[j].mass / Math.pow(distance_center, 2);
+						//get the direction normalized
+						var dir = [(other_particles[j].x - this.x)/distance_center, (other_particles[j].y- this.y)/distance_center];
+						other_particles[j].vel[0]+=force * dir[0];
+						other_particles[j].vel[1]+=force * dir[1];
+					}
+				}
+				
+			}
+		}
+	}
 	//initialize particles
 	var particles = [];
 
@@ -159,7 +193,7 @@
 	// particles.push(p);
 
 	//electrons
-	for (var i = 0; i <20; i++)
+	for (var i = 0; i <25; i++)
 	{
 		var p = new Particle();
 		p.size = (Math.random() * 7) + 4;
@@ -196,41 +230,7 @@
 		{
 			particles[i].move(canvas_size_x, canvas_size_y);
 			particles[i].draw(graphics);
-
-			//process collisions:
-			for (var j = 0; j < particles.length; j++)
-			{
-				if(i != j){
-					//check all interactions
-					for (var l = 0; l < particles[i].interactions.length; l++)
-					{
-						//compare particle names to see if there's an interaction
-						if(particles[i].interactions[l].interacts_with == particles[j].name){
-							
-							var distance_boundaries = particles[i].getDistanceBounderies(particles[j]);
-							var distance_center = particles[i].getDistanceCenter(particles[j]);
-							if(distance_boundaries < 0 && particles[i].interactions[l].direction < 0){
-								//just bounce if they are attracting
-								//console.log("collision");
-								elastic_bounce(particles[i], particles[j]);
-								//particles[i].vel[0] = particles[i].vel[0]*0.5;
-								//particles[i].vel[1] = particles[i].vel[1]*0.5;
-							}
-							else if( distance_center < particles[i].interactions[l].range )
-							{
-								//in range or interaction
-								//based on newton's gravitation law
-								var force = particles[i].interactions[l].direction * particles[i].interactions[l].force * particles[i].mass*particles[j].mass / Math.pow(distance_center, 2);
-								//get the direction normalized
-								var dir = [(particles[j].x - particles[i].x)/distance_center, (particles[j].y- particles[i].y)/distance_center];
-								particles[j].vel[0]+=force * dir[0];
-								particles[j].vel[1]+=force * dir[1];
-							}
-						}
-						
-					}
-				}
-			}
+			particles[i].processCollisions(particles.diff([particles[i]]));
 		}
 	});
 </script>
