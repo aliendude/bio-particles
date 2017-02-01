@@ -13,13 +13,9 @@
 		if(res <= 0.5) return -1;
 	}
 
-	Array.prototype.diff = function(a) {
-	    return this.filter(function(i) {return a.indexOf(i) < 0;});
-	};
-
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var n_particles = 3;
+	var particle_id_counter = 0;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0x87cefa});
 	document.body.appendChild(app.view);
@@ -28,6 +24,8 @@
 	app.stage.addChild(graphics);
 
 	var Particle = function () {
+		this.id = particle_id_counter;
+		particle_id_counter +=1;
 		this.name = "Particle";
 		this.x = 100;
 		this.y = 100;
@@ -113,31 +111,34 @@
 	Particle.prototype.processCollisions = function(other_particles) {
 		for (var j = 0; j < other_particles.length; j++)
 		{
-			//check all interactions
-			for (var l = 0; l < this.interactions.length; l++)
+			if(this.id != other_particles[j].id)
 			{
-				//compare particle names to see if there's an interaction
-				if(this.interactions[l].interacts_with == other_particles[j].name){
+				//check all interactions
+				for (var l = 0; l < this.interactions.length; l++)
+				{
+					//compare particle names to see if there's an interaction
+					if(this.interactions[l].interacts_with == other_particles[j].name){
+						
+						var distance_boundaries = this.getDistanceBounderies(other_particles[j]);
+						var distance_center = this.getDistanceCenter(other_particles[j]);
+						if(distance_boundaries < 0 && this.interactions[l].direction < 0){
+							//just bounce if they are attracting
+							//console.log("collision");
+							this.elasticBounce(other_particles[j]);
+						}
+						else if( distance_center < this.interactions[l].range )
+						{
+							//in range or interaction
+							//based on newton's gravitation law
+							var force = this.interactions[l].direction * this.interactions[l].force * this.mass*other_particles[j].mass / Math.pow(distance_center, 2);
+							//get the direction normalized
+							var dir = [(other_particles[j].x - this.x)/distance_center, (other_particles[j].y- this.y)/distance_center];
+							other_particles[j].vel[0]+=force * dir[0];
+							other_particles[j].vel[1]+=force * dir[1];
+						}
+					}
 					
-					var distance_boundaries = this.getDistanceBounderies(other_particles[j]);
-					var distance_center = this.getDistanceCenter(other_particles[j]);
-					if(distance_boundaries < 0 && this.interactions[l].direction < 0){
-						//just bounce if they are attracting
-						//console.log("collision");
-						this.elasticBounce(other_particles[j]);
-					}
-					else if( distance_center < this.interactions[l].range )
-					{
-						//in range or interaction
-						//based on newton's gravitation law
-						var force = this.interactions[l].direction * this.interactions[l].force * this.mass*other_particles[j].mass / Math.pow(distance_center, 2);
-						//get the direction normalized
-						var dir = [(other_particles[j].x - this.x)/distance_center, (other_particles[j].y- this.y)/distance_center];
-						other_particles[j].vel[0]+=force * dir[0];
-						other_particles[j].vel[1]+=force * dir[1];
-					}
 				}
-				
 			}
 		}
 	}
@@ -193,7 +194,7 @@
 	// particles.push(p);
 
 	//electrons
-	for (var i = 0; i <25; i++)
+	for (var i = 0; i <30; i++)
 	{
 		var p = new Particle();
 		p.size = (Math.random() * 7) + 4;
@@ -208,7 +209,7 @@
 		particles.push(p);
 	}
 
-	for (var i = 0; i < 25; i++)
+	for (var i = 0; i < 30; i++)
 	{
 		var p = new Particle();
 		p.size = (Math.random() * 7) + 4;
@@ -230,7 +231,7 @@
 		{
 			particles[i].move(canvas_size_x, canvas_size_y);
 			particles[i].draw(graphics);
-			particles[i].processCollisions(particles.diff([particles[i]]));
+			particles[i].processCollisions(particles);
 		}
 	});
 </script>
