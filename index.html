@@ -33,6 +33,8 @@
 		this.color = 0xFFFFFF;
 		//percentage of speed lost in each frame:
 		this.friction = 0.0005;
+		//percentage of velocity conserved in a bounce:
+		this.elasticity = 0.4;
 		this.interactions = [{name:"repel", interacts_with: "Particle", direction: -1, range: 10*this.size, force:10}];
 	};
 
@@ -57,22 +59,21 @@
 		//borders 
 		//TO DO: fix this:
 		//bounce:
-		if(this.x + this.size > canvas_size_x || this.x - this.size < 0) this.vel[0] =  -this.vel[0];
-		if(this.y + this.size > canvas_size_y || this.y - this.size < 0) this.vel[1] =  -this.vel[1];
+		//if(this.x + this.size > canvas_size_x || this.x - this.size < 0) this.vel[0] =  -this.vel[0];
+		//if(this.y + this.size > canvas_size_y || this.y - this.size < 0) this.vel[1] =  -this.vel[1];
 		
 		//sphere:
-		//if(this.x > canvas_size_x) this.x = 0;
-		//if(this.y > canvas_size_y) this.y = 0;
-		//if(this.x < 0) this.x =  canvas_size_x;
-		//if(this.y < 0) this.y =  canvas_size_y;
+		//have in mind that interactions break in borders using this:
+		if(this.x > canvas_size_x) this.x = 0;
+		if(this.y > canvas_size_y) this.y = 0;
+		if(this.x < 0) this.x =  canvas_size_x;
+		if(this.y < 0) this.y =  canvas_size_y;
 	};
 
 	Particle.prototype.getDistanceBounderies = function(p){
 		var distance = Math.sqrt(Math.pow(p.x -this.x,2)+Math.pow(p.y - this.y,2));
 		//remove the particle size from the distance
 		distance -= (this.size + p.size);
-		if(distance < 0) distance = 0;
-		//console.log(distance);
 		return distance;
 	};
 
@@ -85,8 +86,6 @@
 
 	function elastic_bounce(p1, p2) {
 		//ellastic newtonian collision
-
-		var velocity_conservation = 0.9; 
 	    var dx = p2.x-p1.x;
 	    var dy = p2.y-p1.y;
 	    var collisionision_angle = Math.atan2(dy, dx);
@@ -102,17 +101,17 @@
 	    var final_xspeed_2 = ((p1.mass+p1.mass)*new_xspeed_1+(p2.mass-p1.mass)*new_xspeed_2)/(p1.mass+p2.mass);
 	    var final_yspeed_1 = new_yspeed_1;
 	    var final_yspeed_2 = new_yspeed_2;
-	    p1.vel[0] = velocity_conservation*(Math.cos(collisionision_angle)*final_xspeed_1+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_1);
-	    p1.vel[1] = velocity_conservation*(Math.sin(collisionision_angle)*final_xspeed_1+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_1);
-	    p2.vel[0] = velocity_conservation*(Math.cos(collisionision_angle)*final_xspeed_2+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_2);
-	    p2.vel[1] = velocity_conservation*(Math.sin(collisionision_angle)*final_xspeed_2+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_2);
+	    p1.vel[0] = p1.elasticity*(Math.cos(collisionision_angle)*final_xspeed_1+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_1);
+	    p1.vel[1] = p1.elasticity*(Math.sin(collisionision_angle)*final_xspeed_1+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_1);
+	    p2.vel[0] = p2.elasticity*(Math.cos(collisionision_angle)*final_xspeed_2+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_2);
+	    p2.vel[1] = p2.elasticity*(Math.sin(collisionision_angle)*final_xspeed_2+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_2);
 	}
 
 	//initialize particles
 	var particles = [];
 
 	// var p = new Particle();
-	// p.size = 20;
+	// p.size = 10;
 	// p.mass = p.size;
 	// p.color = 0x0000ff;
 	// p.x = 100;
@@ -124,10 +123,10 @@
 	// particles.push(p);
 
 	// var p = new Particle();
-	// p.size = 20;
+	// p.size = 10;
 	// p.mass = p.size;
 	// p.color = 0x0000ff;
-	// p.x = 500;
+	// p.x = 400;
 	// p.y = 100;
 	// p.vel = [0,10];
 	// p.name = "Electron";
@@ -135,23 +134,35 @@
 	// 				  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
 	// particles.push(p);
 
+	// var p = new Particle();
+	// p.size = 10;
+	// p.mass = p.size;
+	// p.color = 0x0000ff;
+	// p.x = 400;
+	// p.y = 200;
+	// p.vel = [0,10];
+	// p.name = "Electron";
+	// p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+	// 				  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	// particles.push(p);
+
 	// p = new Particle();
-	// p.size = 30;
+	// p.size = 13;
 	// p.mass = p.size;
 	// p.color = 0xff0000;
 	// p.x = 300;
 	// p.y = 100;
-	// p.vel = [-2,10];
+	// p.vel = [0,0];
 	// p.name = "Proton";
 	// p.interactions = [{name:"repel", interacts_with: "Proton", direction: 1, range: 10*p.size, force:10},
 	// 				  {name:"attract", interacts_with: "Electron", direction: -1, range: 10* p.size, force:10}];
 	// particles.push(p);
 
 	//electrons
-	for (var i = 0; i <30; i++)
+	for (var i = 0; i <20; i++)
 	{
 		var p = new Particle();
-		p.size = Math.floor((Math.random() * 10) + 4);
+		p.size = (Math.random() * 7) + 4;
 		p.mass = p.size;
 		p.color = 0xffffff;
 		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
@@ -163,11 +174,10 @@
 		particles.push(p);
 	}
 
-	//protons
-	for (var i = 0; i < 30; i++)
+	for (var i = 0; i < 25; i++)
 	{
 		var p = new Particle();
-		p.size = Math.floor((Math.random() * 10) + 4);
+		p.size = (Math.random() * 7) + 4;
 		p.mass = p.size;
 		p.color = 0xff0000;
 		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
@@ -197,12 +207,14 @@
 						//compare particle names to see if there's an interaction
 						if(particles[i].interactions[l].interacts_with == particles[j].name){
 							
-							var distance_bounderies = particles[i].getDistanceBounderies(particles[j]);
+							var distance_boundaries = particles[i].getDistanceBounderies(particles[j]);
 							var distance_center = particles[i].getDistanceCenter(particles[j]);
-							if(distance_bounderies == 0 && particles[i].interactions[l].direction < 0){
+							if(distance_boundaries < 0 && particles[i].interactions[l].direction < 0){
 								//just bounce if they are attracting
-								console.log("collision");
+								//console.log("collision");
 								elastic_bounce(particles[i], particles[j]);
+								//particles[i].vel[0] = particles[i].vel[0]*0.5;
+								//particles[i].vel[1] = particles[i].vel[1]*0.5;
 							}
 							else if( distance_center < particles[i].interactions[l].range )
 							{
