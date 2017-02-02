@@ -42,17 +42,20 @@ Particle.prototype.move = function(canvas_size_x, canvas_size_y){
 	if (this.vel[1] != 0) this.vel[1] -= this.vel[1]*this.friction;
 
 	//borders 
-	//TO DO: fix this:
 	//bounce:
-	//if(this.x + this.size > canvas_size_x || this.x - this.size < 0) this.vel[0] =  -this.vel[0];
-	//if(this.y + this.size > canvas_size_y || this.y - this.size < 0) this.vel[1] =  -this.vel[1];
+	var border_bounce_energy = 1.5; 
+	if(this.x + this.size > canvas_size_x ) this.vel[0] -= this.mass * border_bounce_energy;
+	if(this.x - this.size < 0) this.vel[0] +=  this.mass * border_bounce_energy;
+	if(this.y + this.size > canvas_size_y ) this.vel[1] -=  this.mass * border_bounce_energy;
+	if(this.y - this.size < 0) this.vel[1] +=  this.mass * border_bounce_energy;
+	
 	
 	//sphere:
 	//have in mind that interactions break in borders using this:
-	if(this.x > canvas_size_x) this.x = 0;
-	if(this.y > canvas_size_y) this.y = 0;
-	if(this.x < 0) this.x =  canvas_size_x;
-	if(this.y < 0) this.y =  canvas_size_y;
+	//if(this.x > canvas_size_x) this.x = 0;
+	//if(this.y > canvas_size_y) this.y = 0;
+	//if(this.x < 0) this.x =  canvas_size_x;
+	//if(this.y < 0) this.y =  canvas_size_y;
 };
 
 Particle.prototype.getDistanceBoundaries = function(p){
