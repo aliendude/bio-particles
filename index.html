@@ -25,10 +25,10 @@
 	//initialize particles
 	var particles = [];
 
-	for (var i = 0; i <100; i++)
+	for (var i = 0; i <80; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 2.7) + 2;
+		p.size = (Math.random() * 3) + 2;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0x0000ff;
@@ -43,10 +43,10 @@
 		particles.push(p);
 	}
 
-	for (var i = 0; i <100; i++)
+	for (var i = 0; i <80; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 2.7) + 2;
+		p.size = (Math.random() * 3) + 2;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff00ff;
@@ -61,10 +61,10 @@
 		particles.push(p);
 	}
 
-	for (var i = 0; i < 100; i++)
+	for (var i = 0; i < 80; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 2.7) + 2;
+		p.size = (Math.random() * 3) + 2;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff0000;
@@ -78,10 +78,10 @@
 						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:10}];
 		particles.push(p);
 	}
-	for (var i = 0; i < 120; i++)
+	for (var i = 0; i < 80; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 2.7) + 2;
+		p.size = (Math.random() * 3) + 2;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff7f00;
