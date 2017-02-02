@@ -14,7 +14,7 @@
 	}
 
 	var canvas_size_x = 1200;
-	var canvas_size_y = 800;
+	var canvas_size_y = 600;
 	var particle_id_counter = 0;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
@@ -25,59 +25,10 @@
 	//initialize particles
 	var particles = [];
 
-	// var p = new Particle();
-	// p.size = 10;
-	// p.mass = p.size;
-	// p.color = 0x0000ff;
-	// p.x = 100;
-	// p.y = 100;
-	// p.vel = [0,10];
-	// p.name = "Electron";
-	// p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
-	// 				  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
-	// particles.push(p);
-
-	// var p = new Particle();
-	// p.size = 10;
-	// p.mass = p.size;
-	// p.color = 0x0000ff;
-	// p.x = 400;
-	// p.y = 100;
-	// p.vel = [0,10];
-	// p.name = "Electron";
-	// p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
-	// 				  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
-	// particles.push(p);
-
-	// var p = new Particle();
-	// p.size = 10;
-	// p.mass = p.size;
-	// p.color = 0x0000ff;
-	// p.x = 400;
-	// p.y = 200;
-	// p.vel = [0,10];
-	// p.name = "Electron";
-	// p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
-	// 				  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
-	// particles.push(p);
-
-	// p = new Particle();
-	// p.size = 13;
-	// p.mass = p.size;
-	// p.color = 0xff0000;
-	// p.x = 300;
-	// p.y = 100;
-	// p.vel = [0,0];
-	// p.name = "Proton";
-	// p.interactions = [{name:"repel", interacts_with: "Proton", direction: 1, range: 10*p.size, force:10},
-	// 				  {name:"attract", interacts_with: "Electron", direction: -1, range: 10* p.size, force:10}];
-	// particles.push(p);
-
-
-	for (var i = 0; i <120; i++)
+	for (var i = 0; i <100; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 3) + 2.5;
+		p.size = (Math.random() * 2.7) + 2;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0x0000ff;
@@ -92,10 +43,10 @@
 		particles.push(p);
 	}
 
-	for (var i = 0; i <120; i++)
+	for (var i = 0; i <100; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 3) + 2.5;
+		p.size = (Math.random() * 2.7) + 2;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff00ff;
@@ -110,10 +61,10 @@
 		particles.push(p);
 	}
 
-	for (var i = 0; i < 120; i++)
+	for (var i = 0; i < 100; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 3) + 2.5;
+		p.size = (Math.random() * 2.7) + 2;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff0000;
@@ -130,7 +81,7 @@
 	for (var i = 0; i < 120; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 3) + 2.5;
+		p.size = (Math.random() * 2.7) + 2;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff7f00;

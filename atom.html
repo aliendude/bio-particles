@@ -1,0 +1,170 @@
+<html>
+<head>
+<title>BioParticles</title>
+<script src="pixi.js"></script>
+<script src="bioparticles.js"></script>
+</head>
+<body>
+	
+<script type="text/javascript">
+	function getRandSymbol(){
+		var res = Math.random();
+		if(res > 0.5) return 1;
+		if(res <= 0.5) return -1;
+	}
+
+	var canvas_size_x = 1200;
+	var canvas_size_y = 600;
+	var particle_id_counter = 0;
+
+	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
+	document.body.appendChild(app.view);
+
+	var graphics = new PIXI.Graphics();
+	app.stage.addChild(graphics);
+	//initialize particles
+	var particles = [];
+
+	var p = new Particle();
+	p.size = 30;
+	p.mass = p.size;
+	p.color = 0xff0000;
+	p.x = canvas_size_x/2;
+	p.y = canvas_size_y/2;
+	p.vel = [0,0];
+	p.name = "Proton";
+	p.interactions = [{name:"repel", interacts_with: "Proton", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Electron", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	var p = new Particle();
+	p.size = 3;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2 +20;
+	p.y = canvas_size_y/2 +20;
+	p.vel = [0,0];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	var p = new Particle();
+	p.size = 3;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2 +20;
+	p.y = canvas_size_y/2 -20;
+	p.vel = [0,0];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	var p = new Particle();
+	p.size = 3;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2 -20;
+	p.y = canvas_size_y/2 -20;
+	p.vel = [0,0];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	var p = new Particle();
+	p.size = 3;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2 -20;
+	p.y = canvas_size_y/2 +20;
+	p.vel = [0,0];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+
+	var p = new Particle();
+	p.size = 3;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2 +20;
+	p.y = canvas_size_y/2 ;
+	p.vel = [0,0];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	var p = new Particle();
+	p.size = 3;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2;
+	p.y = canvas_size_y/2 + 20;
+	p.vel = [0,0];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	var p = new Particle();
+	p.size = 3;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2 -20;
+	p.y = canvas_size_y/2 ;
+	p.vel = [0,0];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	var p = new Particle();
+	p.size = 3;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2 ;
+	p.y = canvas_size_y/2 -20;
+	p.vel = [0,0];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	var p = new Particle();
+	p.size = 2.45;
+	p.mass = p.size;
+	p.color = 0x0000ff;
+	p.x = canvas_size_x/2 +50;
+	p.y = canvas_size_y/2;
+	p.vel = [0,-5];
+	p.name = "Electron";
+	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
+					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	particles.push(p);
+
+	// Listen for animate update
+	var frame_counter = 0;
+	app.ticker.add(function(delta) {
+
+		if(frame_counter % 1 == 0){
+			graphics.clear();
+			for (var i = 0; i < particles.length; i++)
+			{
+				particles[i].drawCircl(graphics);
+			}
+		}
+		
+		for (var i = 0; i < particles.length; i++)
+		{
+			particles[i].move(canvas_size_x, canvas_size_y);
+			particles[i].processCollisions(particles);
+		}
+		frame_counter +=1;
+	});
+</script>
+</body>
+</html>
