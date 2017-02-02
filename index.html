@@ -14,7 +14,7 @@
 	}
 
 	var canvas_size_x = 1200;
-	var canvas_size_y = 600;
+	var canvas_size_y = 1200;
 	var particle_id_counter = 0;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
@@ -34,21 +34,29 @@
 		this.vel = [1,1];
 		this.color = 0xFFFFFF;
 		//percentage of speed lost in each frame:
-		this.friction = 0.0005;
+		this.friction = 0;
 		//percentage of velocity conserved in a bounce:
 		this.elasticity = 0.4;
 		this.interactions = [{name:"repel", interacts_with: "Particle", direction: -1, range: 10*this.size, force:10}];
 	};
 
-	Particle.prototype.draw = function(graphics){
+	Particle.prototype.drawCircl = function(graphics){
 		// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
 		graphics.lineStyle(0);
 		graphics.beginFill(this.color, 0.6);
-		graphics.drawCircle(this.x, this.y, this.mass);
+		graphics.drawCircle(this.x, this.y, this.size);
 		graphics.endFill();
 
 	};
 
+	Particle.prototype.drawRect = function(graphics){
+		// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
+		graphics.lineStyle(0);
+		graphics.beginFill(this.color, 0.6);
+		graphics.drawRect(this.x, this.y, this.size*1.5, this.size*1.5)
+		graphics.endFill();
+
+	};
 	Particle.prototype.move = function(canvas_size_x, canvas_size_y){
 
 		//apply velocity:
@@ -72,7 +80,7 @@
 		if(this.y < 0) this.y =  canvas_size_y;
 	};
 
-	Particle.prototype.getDistanceBounderies = function(p){
+	Particle.prototype.getDistanceBoundaries = function(p){
 		var distance = Math.sqrt(Math.pow(p.x -this.x,2)+Math.pow(p.y - this.y,2));
 		//remove the particle size from the distance
 		distance -= (this.size + p.size);
@@ -119,7 +127,7 @@
 					//compare particle names to see if there's an interaction
 					if(this.interactions[l].interacts_with == other_particles[j].name){
 						
-						var distance_boundaries = this.getDistanceBounderies(other_particles[j]);
+						var distance_boundaries = this.getDistanceBoundaries(other_particles[j]);
 						var distance_center = this.getDistanceCenter(other_particles[j]);
 						if(distance_boundaries < 0){
 							//console.log("collision");
@@ -192,41 +200,82 @@
 	// 				  {name:"attract", interacts_with: "Electron", direction: -1, range: 10* p.size, force:10}];
 	// particles.push(p);
 
-	//electrons
-	for (var i = 0; i <40; i++)
+
+	for (var i = 0; i <120; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 4) + 3;
+		p.size = (Math.random() * 3) + 2.5;
+		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0x0000ff;
 		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
-		p.name = "Electron";
-		p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
-						  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+		p.name = "A";
+		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: 10*p.size, force:10},
+						  {name:"repel", interacts_with: "C", direction: 1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "B", direction: -1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "D", direction: -1, range: 10* p.size, force:10},];
 		particles.push(p);
 	}
 
-	for (var i = 0; i < 60; i++)
+	for (var i = 0; i <120; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 4) + 3;
+		p.size = (Math.random() * 3) + 2.5;
+		//p.size = 3;
+		p.mass = p.size;
+		p.color = 0xff00ff;
+		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
+		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
+		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
+		p.name = "B";
+		p.interactions = [{name:"repel", interacts_with: "B", direction: 1, range: 10*p.size, force:10},
+						  {name:"repel", interacts_with: "D", direction: 1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "C", direction: -1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:10}];
+		particles.push(p);
+	}
+
+	for (var i = 0; i < 120; i++)
+	{
+		var p = new Particle();
+		p.size = (Math.random() * 3) + 2.5;
+		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff0000;
 		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
-		p.name = "Proton";
-		p.interactions = [{name:"repel", interacts_with: "Proton", direction: 1, range: 10* p.size, force:10},
-						  {name:"attract", interacts_with: "Electron", direction: -1, range: 10*p.size, force:10}];
+		p.name = "C";
+		p.interactions = [{name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:10},
+						  {name:"repel", interacts_with: "A", direction: 1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "D", direction: -1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:10}];
+		particles.push(p);
+	}
+	for (var i = 0; i < 120; i++)
+	{
+		var p = new Particle();
+		p.size = (Math.random() * 3) + 2.5;
+		//p.size = 3;
+		p.mass = p.size;
+		p.color = 0xff7f00;
+		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
+		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
+		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
+		p.name = "D";
+		p.interactions = [{name:"repel", interacts_with: "D", direction: 1, range: 10* p.size, force:10},
+						  {name:"repel", interacts_with: "B", direction: 1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "A", direction: -1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "C", direction: -1, range: 10*p.size, force:10}];
 		particles.push(p);
 	}
 
-	for (var i = 0; i < 10; i++)
+	for (var i = 0; i < 20; i++)
 	{
 		var p = new Particle();
-		p.size = (Math.random() * 3) + 2;
+		p.size = 3;
 		p.mass = p.size;
 		p.color = 0x000000;
 		p.elasticity = 1;
@@ -236,40 +285,52 @@
 		p.vel = [10,10];
 		p.name = "Bullet";
 		//just bounce against everything
-		p.interactions = [{name:"repel", interacts_with: "Proton", direction: 1, range: p.size-1, force:10},
-						  {name:"repel", interacts_with: "Electron", direction: 1, range: p.size-1, force:10},
+		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: p.size-1, force:10},
+						  {name:"repel", interacts_with: "B", direction: 1, range: p.size-1, force:10},
+						  {name:"repel", interacts_with: "C", direction: 1, range: p.size-1, force:10},
+						  {name:"repel", interacts_with: "D", direction: 1, range: p.size-1, force:10},
 						  {name:"repel", interacts_with: "Bullet", direction: 1, range: p.size-1, force:10}];
 		particles.push(p);
 	}
 
-	for (var i = 0; i < 10; i++)
-	{
-		var p = new Particle();
-		p.size = (Math.random() * 3) + 2;
-		p.mass = p.size;
-		p.color = 0x00ff00;
-		p.elasticity = 0.1;
-		p.friction = 0.0001;
-		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
-		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
-		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
-		p.name = "Sticky";
-		//just attatch to everything
-		p.interactions = [{name:"attract", interacts_with: "Proton", direction: -1, range: p.size+1, force:10},
-						  {name:"attract", interacts_with: "Electron", direction: -1, range: p.size+1, force:10},
-						  {name:"attract", interacts_with: "Bullet", direction: -1, range: p.size+1, force:10},
-						  {name:"attract", interacts_with: "Sticky", direction: -1, range: p.size+1, force:10}];
-		particles.push(p);
-	}
+	// for (var i = 0; i < 10; i++)
+	// {
+	// 	var p = new Particle();
+	// 	p.size = (Math.random() * 3) + 2;
+	// 	p.mass = p.size;
+	// 	p.color = 0x00ff00;
+	// 	p.elasticity = 0.1;
+	// 	p.friction = 0.0001;
+	// 	p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
+	// 	p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
+	// 	p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
+	// 	p.name = "Sticky";
+	// 	//just attatch to everything
+	// 	p.interactions = [{name:"attract", interacts_with: "A", direction: -1, range: p.size+1, force:10},
+	// 					  {name:"attract", interacts_with: "B", direction: -1, range: p.size+1, force:10},
+	// 					  {name:"attract", interacts_with: "C", direction: -1, range: p.size+1, force:10},
+	// 					  {name:"attract", interacts_with: "Bullet", direction: -1, range: p.size+1, force:10},
+	// 					  {name:"attract", interacts_with: "Sticky", direction: -1, range: p.size+1, force:10}];
+	// 	particles.push(p);
+	// }
 	// Listen for animate update
+	var frame_counter = 0;
 	app.ticker.add(function(delta) {
-		graphics.clear();
+
+		if(frame_counter % 1 == 0){
+			graphics.clear();
+			for (var i = 0; i < particles.length; i++)
+			{
+				particles[i].drawCircl(graphics);
+			}
+		}
+		
 		for (var i = 0; i < particles.length; i++)
 		{
 			particles[i].move(canvas_size_x, canvas_size_y);
-			particles[i].draw(graphics);
 			particles[i].processCollisions(particles);
 		}
+		frame_counter +=1;
 	});
 </script>
 </body>
