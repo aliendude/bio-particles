@@ -25,14 +25,14 @@
 	//initialize particles
 	var particles = [];
 
-	for (var i =0; i < 7; i++){
+	for (var i =0; i < 8; i++){
 		var p = new Particle();
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0x0000ff;
-		p.x = 100 + (180*i);
-		p.y = canvas_size_y/2;
+		p.x = 100 + (90*i);
+		p.y = canvas_size_y/2 -10 -50*i;
 		p.vel =[0,0];
 		p.name = "A";
 		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: 10*p.size, force:10},
@@ -46,8 +46,8 @@
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff00ff;
-		p.x = 120 + (180*i);
-		p.y = canvas_size_y/2;
+		p.x = 110 + (90*i);
+		p.y = canvas_size_y/2 -20 -50*i;
 		p.vel =[0,0];
 		p.name = "B";
 		p.interactions = [{name:"repel", interacts_with: "B", direction: 1, range: 10*p.size, force:10},
@@ -61,8 +61,8 @@
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff0000;
-		p.x = 140 + (180*i);
-		p.y = canvas_size_y/2;
+		p.x = 120 + (90*i);
+		p.y = canvas_size_y/2 -30 -50*i;
 		p.vel =[0,0];
 		p.name = "C";
 		p.interactions = [{name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:10},
@@ -76,8 +76,8 @@
 		//p.size = 3;
 		p.mass = p.size;
 		p.color = 0xff7f00;
-		p.x = 160 + (180*i);
-		p.y = canvas_size_y/2;
+		p.x = 130 + (90*i);
+		p.y = canvas_size_y/2 -40 -50*i;
 		p.vel =[0,0];
 		p.name = "D";
 		p.interactions = [{name:"repel", interacts_with: "D", direction: 1, range: 10* p.size, force:10},
