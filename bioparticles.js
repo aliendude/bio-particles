@@ -36,7 +36,7 @@ Particle.prototype.drawRect = function(){
 	// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
 	this.graphics.lineStyle(0);
 	this.graphics.beginFill(this.color, 0.6);
-	this.graphics.drawRect(this.x, this.y, this.size*1.5, this.size*1.5)
+	this.graphics.drawRect(this.x, this.y, this.size*2, this.size*2)
 	this.graphics.endFill();
 
 };

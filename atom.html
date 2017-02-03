@@ -133,15 +133,23 @@
 	particles.push(p);
 
 	var p = new Particle(app.stage);
-	p.size = 2.45;
-	p.mass = p.size;
-	p.color = 0x0000ff;
+	p.size = 1;
+	p.mass = 2.45;
+	p.color = 0x000000;
 	p.x = canvas_size_x/2 +50;
 	p.y = canvas_size_y/2;
 	p.vel = [0,-5];
 	p.name = "Electron";
 	p.interactions = [{name:"repel", interacts_with: "Electron", direction: 1, range: 10*p.size, force:10},
 					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
+	p.drawCircl = function(){
+		// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
+		this.graphics.lineStyle(0);
+		this.graphics.beginFill(this.color, 0.6);
+		this.graphics.drawCircle(this.x, this.y, this.size);
+		this.graphics.endFill();
+
+	};
 	particles.push(p);
 
 	// Listen for animate update
