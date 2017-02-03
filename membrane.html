@@ -26,7 +26,7 @@
 	var particles = [];
 
 	for (var i =0; i < 8; i++){
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
@@ -41,7 +41,7 @@
 						  {name:"attract", interacts_with: "D", direction: -1, range: 10* p.size, force:10},];
 		particles.push(p);
 
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
@@ -56,7 +56,7 @@
 						  {name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:10}];
 		particles.push(p);
 
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
@@ -71,7 +71,7 @@
 						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:10}];
 		particles.push(p);
 
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
@@ -92,10 +92,10 @@
 	app.ticker.add(function(delta) {
 
 		if(frame_counter % 1 == 0){
-			graphics.clear();
+			//graphics.clear();
 			for (var i = 0; i < particles.length; i++)
 			{
-				particles[i].drawCircl(graphics);
+				particles[i].drawCircl();
 			}
 		}
 		

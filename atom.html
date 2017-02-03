@@ -20,12 +20,10 @@
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
 
-	var graphics = new PIXI.Graphics();
-	app.stage.addChild(graphics);
 	//initialize particles
 	var particles = [];
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 30;
 	p.mass = p.size;
 	p.color = 0xff0000;
@@ -37,7 +35,7 @@
 					  {name:"attract", interacts_with: "Electron", direction: -1, range: 10* p.size, force:10}];
 	particles.push(p);
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 3;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -49,7 +47,7 @@
 					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
 	particles.push(p);
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 3;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -61,7 +59,7 @@
 					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
 	particles.push(p);
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 3;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -73,7 +71,7 @@
 					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
 	particles.push(p);
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 3;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -86,7 +84,7 @@
 	particles.push(p);
 
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 3;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -98,7 +96,7 @@
 					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
 	particles.push(p);
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 3;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -110,7 +108,7 @@
 					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
 	particles.push(p);
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 3;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -122,7 +120,7 @@
 					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
 	particles.push(p);
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 3;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -134,7 +132,7 @@
 					  {name:"attract", interacts_with: "Proton", direction: -1, range: 10* p.size, force:10}];
 	particles.push(p);
 
-	var p = new Particle();
+	var p = new Particle(app.stage);
 	p.size = 2.45;
 	p.mass = p.size;
 	p.color = 0x0000ff;
@@ -151,10 +149,10 @@
 	app.ticker.add(function(delta) {
 
 		if(frame_counter % 1 == 0){
-			graphics.clear();
+			//graphics.clear();
 			for (var i = 0; i < particles.length; i++)
 			{
-				particles[i].drawCircl(graphics);
+				particles[i].drawCircl();
 			}
 		}
 		

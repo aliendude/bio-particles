@@ -20,14 +20,12 @@
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
 
-	var graphics = new PIXI.Graphics();
-	app.stage.addChild(graphics);
 	//initialize particles
 	var particles = [];
 
 	for (var i = 0; i <80; i++)
 	{
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = (Math.random() * 3) + 2;
 		//p.size = 3;
 		p.mass = p.size;
@@ -45,7 +43,7 @@
 
 	for (var i = 0; i <80; i++)
 	{
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = (Math.random() * 3) + 2;
 		//p.size = 3;
 		p.mass = p.size;
@@ -63,7 +61,7 @@
 
 	for (var i = 0; i < 80; i++)
 	{
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = (Math.random() * 3) + 2;
 		//p.size = 3;
 		p.mass = p.size;
@@ -80,7 +78,7 @@
 	}
 	for (var i = 0; i < 80; i++)
 	{
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = (Math.random() * 3) + 2;
 		//p.size = 3;
 		p.mass = p.size;
@@ -98,7 +96,7 @@
 
 	for (var i = 0; i < 20; i++)
 	{
-		var p = new Particle();
+		var p = new Particle(app.stage);
 		p.size = 3;
 		p.mass = p.size;
 		p.color = 0x000000;
@@ -119,7 +117,8 @@
 
 	// for (var i = 0; i < 10; i++)
 	// {
-	// 	var p = new Particle();
+	// 	var graphics = new PIXI.Graphics();
+	//	var p = new Particle(app.stage);
 	// 	p.size = (Math.random() * 3) + 2;
 	// 	p.mass = p.size;
 	// 	p.color = 0x00ff00;
@@ -142,10 +141,10 @@
 	app.ticker.add(function(delta) {
 
 		if(frame_counter % 1 == 0){
-			graphics.clear();
+			//graphics.clear();
 			for (var i = 0; i < particles.length; i++)
 			{
-				particles[i].drawCircl(graphics);
+				particles[i].drawCircl();
 			}
 		}
 		

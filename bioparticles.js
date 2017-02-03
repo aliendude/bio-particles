@@ -1,4 +1,10 @@
-var Particle = function () {
+var Particle = function (stage) {
+
+	this.stage = stage;
+	//the graphic object
+	this.graphics = new PIXI.Graphics();
+	this.stage.addChild(this.graphics);
+
 	this.id = particle_id_counter;
 	particle_id_counter +=1;
 	this.name = "Particle";
@@ -15,24 +21,27 @@ var Particle = function () {
 	this.interactions = [{name:"repel", interacts_with: "Particle", direction: -1, range: 10*this.size, force:10}];
 };
 
-Particle.prototype.drawCircl = function(graphics){
+Particle.prototype.drawCircl = function(){
+	this.graphics.clear();
 	// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
-	graphics.lineStyle(0);
-	graphics.beginFill(this.color, 0.6);
-	graphics.drawCircle(this.x, this.y, this.size);
-	graphics.endFill();
+	this.graphics.lineStyle(0);
+	this.graphics.beginFill(this.color, 0.6);
+	this.graphics.drawCircle(this.x, this.y, this.size);
+	this.graphics.endFill();
 
 };
 
-Particle.prototype.drawRect = function(graphics){
+Particle.prototype.drawRect = function(){
+	this.graphics.clear();
 	// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
-	graphics.lineStyle(0);
-	graphics.beginFill(this.color, 0.6);
-	graphics.drawRect(this.x, this.y, this.size*1.5, this.size*1.5)
-	graphics.endFill();
+	this.graphics.lineStyle(0);
+	this.graphics.beginFill(this.color, 0.6);
+	this.graphics.drawRect(this.x, this.y, this.size*1.5, this.size*1.5)
+	this.graphics.endFill();
 
 };
 Particle.prototype.move = function(canvas_size_x, canvas_size_y){
+
 
 	//apply velocity:
 	this.x += this.vel[0];
@@ -56,6 +65,8 @@ Particle.prototype.move = function(canvas_size_x, canvas_size_y){
 	//if(this.y > canvas_size_y) this.y = 0;
 	//if(this.x < 0) this.x =  canvas_size_x;
 	//if(this.y < 0) this.y =  canvas_size_y;
+	
+
 };
 
 Particle.prototype.getDistanceBoundaries = function(p){
