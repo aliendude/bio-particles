@@ -131,9 +131,19 @@ Particle.prototype.processCollisions = function(other_particles) {
 					var distance_boundaries = this.getDistanceBoundaries(other_particles[j]);
 					var distance_center = this.getDistanceCenter(other_particles[j]);
 					//if is colliding and is repeling the other particle 
-					if(distance_boundaries < 0 && this.interactions[l].direction < 0){
-						//console.log("collision");
-						this.elasticBounce(other_particles[j]);
+					if(distance_boundaries < 0 ){
+						if(this.interactions[l].direction < 0){
+							//console.log("collision");
+							this.elasticBounce(other_particles[j]);
+						} else {
+							//do the bounce but also push the force
+							this.elasticBounce(other_particles[j]);
+
+							var force = this.interactions[l].direction * this.interactions[l].force * this.mass*other_particles[j].mass / Math.pow(distance_center, 2);
+							var dir = [(other_particles[j].x - this.x)/distance_center, (other_particles[j].y- this.y)/distance_center];
+							other_particles[j].vel[0]+=force * dir[0];
+							other_particles[j].vel[1]+=force * dir[1];
+						}
 					}
 					else if( distance_center < this.interactions[l].range )
 					{

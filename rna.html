@@ -89,13 +89,13 @@
 		var p = new Particle(app.stage);
 		p.size = 3;
 		//p.size = 3;
-		p.mass = p.size*2;
+		p.mass = p.size*1.9;
 		p.color = 0xf37406;
 		p.x = canvas_size_x/2 +24 + 32*i;
 		p.y = canvas_size_y/2 + 9;
 		p.vel =[0,0];
 		p.name = "a";
-		p.interactions = [{name:"attract", interacts_with: "A", direction: 1, range: 10* p.size, force:10}];
+		p.interactions = [{name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:10}];
 		particles.push(p);
 	}
 	// Listen for animate update
