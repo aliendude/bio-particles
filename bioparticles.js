@@ -31,6 +31,10 @@ Particle.prototype.drawCircl = function(){
 
 };
 
+Particle.prototype.draw = function(){
+	this.drawCircl();
+};
+
 Particle.prototype.drawRect = function(){
 	this.graphics.clear();
 	// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
@@ -40,6 +44,28 @@ Particle.prototype.drawRect = function(){
 	this.graphics.endFill();
 
 };
+
+Particle.prototype.borderBounce = function(){
+	//bounce:
+	var border_bounce_energy = 1.5; 
+	if(this.x + this.size > canvas_size_x ) this.vel[0] -= this.mass * border_bounce_energy;
+	if(this.x - this.size < 0) this.vel[0] +=  this.mass * border_bounce_energy;
+	if(this.y + this.size > canvas_size_y ) this.vel[1] -=  this.mass * border_bounce_energy;
+	if(this.y - this.size < 0) this.vel[1] +=  this.mass * border_bounce_energy;	
+}
+
+Particle.prototype.borderSphere = function(){
+	//sphere:
+	//have in mind that interactions break in borders using this:
+	if(this.x > canvas_size_x) this.x = 0;
+	if(this.y > canvas_size_y) this.y = 0;
+	if(this.x < 0) this.x =  canvas_size_x;
+	if(this.y < 0) this.y =  canvas_size_y;
+}
+
+Particle.prototype.borderInteraction = function(){
+	this.borderBounce();
+}
 Particle.prototype.move = function(canvas_size_x, canvas_size_y){
 
 
@@ -51,21 +77,7 @@ Particle.prototype.move = function(canvas_size_x, canvas_size_y){
 	if (this.vel[1] != 0) this.vel[1] -= this.vel[1]*this.friction;
 
 	//borders 
-	//bounce:
-	var border_bounce_energy = 1.5; 
-	if(this.x + this.size > canvas_size_x ) this.vel[0] -= this.mass * border_bounce_energy;
-	if(this.x - this.size < 0) this.vel[0] +=  this.mass * border_bounce_energy;
-	if(this.y + this.size > canvas_size_y ) this.vel[1] -=  this.mass * border_bounce_energy;
-	if(this.y - this.size < 0) this.vel[1] +=  this.mass * border_bounce_energy;
-	
-	
-	//sphere:
-	//have in mind that interactions break in borders using this:
-	//if(this.x > canvas_size_x) this.x = 0;
-	//if(this.y > canvas_size_y) this.y = 0;
-	//if(this.x < 0) this.x =  canvas_size_x;
-	//if(this.y < 0) this.y =  canvas_size_y;
-	
+	this.borderInteraction();
 
 };
 
@@ -118,7 +130,8 @@ Particle.prototype.processCollisions = function(other_particles) {
 					
 					var distance_boundaries = this.getDistanceBoundaries(other_particles[j]);
 					var distance_center = this.getDistanceCenter(other_particles[j]);
-					if(distance_boundaries < 0){
+					//if is colliding and is repeling the other particle 
+					if(distance_boundaries < 0 && this.interactions[l].direction < 0){
 						//console.log("collision");
 						this.elasticBounce(other_particles[j]);
 					}
