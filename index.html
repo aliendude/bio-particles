@@ -15,13 +15,15 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var particle_id_counter = 0;
+	//draw every n movements
+	var draw_skipping = 5;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
 
 	//initialize particles
 	var particles = [];
+	var particle_id_counter = 0;
 
 	for (var i = 0; i <80; i++)
 	{
@@ -94,26 +96,48 @@
 		particles.push(p);
 	}
 
-	for (var i = 0; i < 20; i++)
-	{
-		var p = new Particle(app.stage);
-		p.size = 3;
-		p.mass = p.size;
-		p.color = 0x000000;
-		p.elasticity = 1;
-		p.friction = 0.0001;
-		p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
-		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
-		p.vel = [10,10];
-		p.name = "Bullet";
-		//just bounce against everything
-		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: p.size-1, force:10},
-						  {name:"repel", interacts_with: "B", direction: 1, range: p.size-1, force:10},
-						  {name:"repel", interacts_with: "C", direction: 1, range: p.size-1, force:10},
-						  {name:"repel", interacts_with: "D", direction: 1, range: p.size-1, force:10},
-						  {name:"repel", interacts_with: "Bullet", direction: 1, range: p.size-1, force:10}];
-		particles.push(p);
-	}
+	// for (var i = 0; i < 10; i++)
+	// {
+	// 	var p = new Particle(app.stage);
+	// 	p.size = 3;
+	// 	p.mass = p.size;
+	// 	p.color = 0x000000;
+	// 	p.elasticity = 1;
+	// 	p.friction = 0.0001;
+	// 	p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
+	// 	p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
+	// 	p.vel = [10,10];
+	// 	p.name = "Bullet";
+	// 	//just bounce against everything
+	// 	p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: p.size-1, force:10},
+	// 					  {name:"repel", interacts_with: "B", direction: 1, range: p.size-1, force:10},
+	// 					  {name:"repel", interacts_with: "C", direction: 1, range: p.size-1, force:10},
+	// 					  {name:"repel", interacts_with: "D", direction: 1, range: p.size-1, force:10},
+	// 					  {name:"repel", interacts_with: "Bullet", direction: 1, range: p.size-1, force:10},
+	// 					  {name:"repel", interacts_with: "Bullet1", direction: 1, range: p.size-1, force:10}];
+	// 	particles.push(p);
+	// }
+	// for (var i = 0; i < 10; i++)
+	// {
+	// 	var p = new Particle(app.stage);
+	// 	p.size = 3;
+	// 	p.mass = p.size;
+	// 	p.color = 0x444444;
+	// 	p.elasticity = 1;
+	// 	p.friction = 0.0001;
+	// 	p.x = Math.floor((Math.random() * canvas_size_x - p.size) + p.size);
+	// 	p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
+	// 	p.vel = [10,10];
+	// 	p.name = "Bullet1";
+	// 	//just bounce against everything
+	// 	p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: p.size+20, force:10},
+	// 					  {name:"repel", interacts_with: "B", direction: 1, range: p.size+20, force:10},
+	// 					  {name:"repel", interacts_with: "C", direction: 1, range: p.size+20, force:10},
+	// 					  {name:"repel", interacts_with: "D", direction: 1, range: p.size+20, force:10},
+	// 					  {name:"repel", interacts_with: "Bullet1", direction: 1, range: p.size+20, force:10},
+	// 					  {name:"repel", interacts_with: "Bullet", direction: 1, range: p.size+20, force:10}];
+	// 	particles.push(p);
+	// }
 
 	// for (var i = 0; i < 10; i++)
 	// {
@@ -137,23 +161,23 @@
 	// 	particles.push(p);
 	// }
 	// Listen for animate update
-	var frame_counter = 0;
 	app.ticker.add(function(delta) {
 
-		if(frame_counter % 1 == 0){
-			//graphics.clear();
-			for (var i = 0; i < particles.length; i++)
-			{
-				particles[i].draw();
-			}
-		}
-		
+
+		//graphics.clear();
 		for (var i = 0; i < particles.length; i++)
 		{
-			particles[i].move(canvas_size_x, canvas_size_y);
-			particles[i].processCollisions(particles);
+			particles[i].draw();
 		}
-		frame_counter +=1;
+
+		for( var x = 0; x <= draw_skipping; x++)
+		{
+			for (var i = 0; i < particles.length; i++)
+			{
+				particles[i].move(canvas_size_x, canvas_size_y);
+				particles[i].processCollisions(particles);
+			}
+		}
 	});
 </script>
 </body>
