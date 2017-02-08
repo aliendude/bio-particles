@@ -16,7 +16,7 @@
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
 	//draw every n movements
-	var draw_skipping = 0;
+	var draw_skipping = 4;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -36,10 +36,10 @@
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
 		p.name = "A";
-		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: 10*p.size, force:10},
-						  {name:"repel", interacts_with: "C", direction: 1, range: 10*p.size, force:10},
-						  {name:"attract", interacts_with: "B", direction: -1, range: 10* p.size, force:10},
-						  {name:"attract", interacts_with: "D", direction: -1, range: 10* p.size, force:10},];
+		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: 10*p.size, force:5},
+						  {name:"repel", interacts_with: "C", direction: 1, range: 10*p.size, force:5},
+						  {name:"attract", interacts_with: "B", direction: -1, range: 10* p.size, force:5},
+						  {name:"attract", interacts_with: "D", direction: -1, range: 10* p.size, force:5},];
 		particles.push(p);
 	}
 
@@ -54,10 +54,10 @@
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
 		p.name = "B";
-		p.interactions = [{name:"repel", interacts_with: "B", direction: 1, range: 10*p.size, force:10},
-						  {name:"repel", interacts_with: "D", direction: 1, range: 10*p.size, force:10},
-						  {name:"attract", interacts_with: "C", direction: -1, range: 10* p.size, force:10},
-						  {name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:10}];
+		p.interactions = [{name:"repel", interacts_with: "B", direction: 1, range: 10*p.size, force:5},
+						  {name:"repel", interacts_with: "D", direction: 1, range: 10*p.size, force:5},
+						  {name:"attract", interacts_with: "C", direction: -1, range: 10* p.size, force:5},
+						  {name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:5}];
 		particles.push(p);
 	}
 
@@ -72,10 +72,10 @@
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
 		p.name = "C";
-		p.interactions = [{name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:10},
-						  {name:"repel", interacts_with: "A", direction: 1, range: 10* p.size, force:10},
-						  {name:"attract", interacts_with: "D", direction: -1, range: 10*p.size, force:10},
-						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:10}];
+		p.interactions = [{name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:5},
+						  {name:"repel", interacts_with: "A", direction: 1, range: 10* p.size, force:5},
+						  {name:"attract", interacts_with: "D", direction: -1, range: 10*p.size, force:5},
+						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:5}];
 		particles.push(p);
 	}
 	for (var i = 0; i < 80; i++)
@@ -89,10 +89,10 @@
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
 		p.name = "D";
-		p.interactions = [{name:"repel", interacts_with: "D", direction: 1, range: 10* p.size, force:10},
-						  {name:"repel", interacts_with: "B", direction: 1, range: 10* p.size, force:10},
-						  {name:"attract", interacts_with: "A", direction: -1, range: 10*p.size, force:10},
-						  {name:"attract", interacts_with: "C", direction: -1, range: 10*p.size, force:10}];
+		p.interactions = [{name:"repel", interacts_with: "D", direction: 1, range: 10* p.size, force:5},
+						  {name:"repel", interacts_with: "B", direction: 1, range: 10* p.size, force:5},
+						  {name:"attract", interacts_with: "A", direction: -1, range: 10*p.size, force:5},
+						  {name:"attract", interacts_with: "C", direction: -1, range: 10*p.size, force:5}];
 		particles.push(p);
 	}
 
@@ -163,7 +163,6 @@
 	// Listen for animate update
 	app.ticker.add(function(delta) {
 
-
 		//graphics.clear();
 		for (var i = 0; i < particles.length; i++)
 		{
@@ -175,7 +174,9 @@
 			for (var i = 0; i < particles.length; i++)
 			{
 				particles[i].move(canvas_size_x, canvas_size_y);
+				//process magnetic forces and collisions:
 				particles[i].processCollisions(particles);
+
 			}
 		}
 	});

@@ -15,17 +15,18 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var particle_id_counter = 0;
+	var draw_skipping = 0;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
 
-	var graphics = new PIXI.Graphics();
-	app.stage.addChild(graphics);
 	//initialize particles
 	var particles = [];
+	var particle_id_counter = 0;
+	var structures = [];
 
-	for (var i =0; i < 8; i++){
+
+	for (var i =0; i < 5; i++){
 		var p = new Particle(app.stage);
 		p.size = 10;
 		//p.size = 3;
@@ -90,21 +91,129 @@
 	// Listen for animate update
 	var frame_counter = 0;
 	app.ticker.add(function(delta) {
-
-		if(frame_counter % 1 == 0){
-			//graphics.clear();
-			for (var i = 0; i < particles.length; i++)
-			{
-				particles[i].draw();
-			}
-		}
-		
+		//graphics.clear();
 		for (var i = 0; i < particles.length; i++)
 		{
-			particles[i].move(canvas_size_x, canvas_size_y);
-			particles[i].processCollisions(particles);
+			particles[i].draw();
 		}
-		frame_counter +=1;
+
+		for( var x = 0; x <= draw_skipping; x++)
+		{
+			//update graphs
+			//iterate over all structures
+			for (var m = 0; m < structures.length; m++) {
+				 structures[m].draw();
+
+
+				var current_struct = structures[m];
+				//console.log("Number of structures: "+ structures.length);
+				for (var u =0; u < current_struct.vertices.length; u++)
+				{
+					//console.log("Structure size: "+ current_struct.vertices.length);
+					//iterate over all vertice's edges:
+					for(var v = 0; v < current_struct.edges[current_struct.vertices[u]].length; v++) {
+						//check if the vertice is still touching with its edge
+						if(current_struct.vertices[u].getDistanceBoundaries(current_struct.edges[current_struct.vertices[u]][v]) > 8) {
+							//not touching anymore
+							//console.log("remove from graph");
+							current_struct.removeVertex(current_struct.edges[current_struct.vertices[u]][v]);
+							break;
+						}
+						
+					}
+				}
+				//structures[m].print();
+			}
+
+			for (var i = 0; i < particles.length; i++)
+			{
+				particles[i].move(canvas_size_x, canvas_size_y);
+				particles[i].processCollisions(particles);
+
+
+				//process collisions to generate graphs:
+				for (var j = 0; j < particles.length; j++) {
+					//skip current particle
+					if(i != j) {
+						if(particles[i].getDistanceBoundaries(particles[j]) <= 0) {
+
+							var belongs_to_structure = false;
+							for (var m = 0; m < structures.length; m++){	
+
+								//check if the i particle belongs to the structure
+								if( structures[m].vertices.indexOf(particles[i]) != -1) {
+									//the graph contains the first vertex
+									belongs_to_structure = true;
+									//check if contains the second vertex:
+									if(structures[m].vertices.indexOf(particles[j]) == -1) {
+										//the graph doesn't contain the second vertex
+										var sec_belongs_to_struc = false;
+										//check if other structure contains the second vertex
+										for(var g = 0; g < structures.length; g++){
+											//skip the current structure
+											if(g != m ) {
+												if(structures[g].vertices.indexOf(particles[j]) != -1) {
+													//the structure contains the second vertex
+													sec_belongs_to_struc = true;
+													
+													//new edge
+													structures[m].addVertex(particles[j]);
+													structures[m].addEdge(particles[i], particles[j]);
+
+													//time to sum the graphs
+													structures[m].addGraph(structures[g]);
+													//clean and delete
+													//todo: this may cause some trouble woth structures:
+													structures[g].graphics.clear();
+													structures.splice(g, 1);
+													break;													
+												}
+											}
+										}
+										
+										if(!sec_belongs_to_struc){
+											//if the second vertex doesn't belong to any structure
+											structures[m].addVertex(particles[j]);
+											structures[m].addEdge(particles[i], particles[j]);
+											
+										}
+									}
+								}
+							}
+							if (!belongs_to_structure) {
+								//check if other structure contains the second vertex
+								var sec_belongs_to_struc = false;
+								for(var g = 0; g < structures.length; g++){
+									//skip the current structure
+									
+									if(structures[g].vertices.indexOf(particles[j]) != -1) {
+										//the structure contains the second vertex
+										sec_belongs_to_struc = true;
+										
+										//new edge
+										structures[g].addVertex(particles[i]);
+										structures[g].addEdge(particles[j], particles[i]);
+									}
+									
+
+								}
+								if(!sec_belongs_to_struc){
+									//if the second vertex doesn't belong to any structure
+									var new_struct = new Graph(app.stage);
+									new_struct.addVertex(particles[i]);
+									new_struct.addVertex(particles[j]);
+									new_struct.addEdge(particles[i], particles[j]);
+
+									structures.push(new_struct);
+									
+								}
+							}
+						}
+					}
+				}
+
+			}
+		}
 	});
 </script>
 </body>
