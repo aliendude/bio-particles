@@ -8,13 +8,12 @@ var Particle = function (stage) {
 	this.stage.addChild(this.graphics);
 	
 	//text
-	this.printLabel = true;
+	this.printLabel = false;
 	var style = new PIXI.TextStyle({
 	    fontFamily: 'Arial',
 	    fontSize: 10,
 	});
 	this.label = new PIXI.Text(this.id.toString(), style);
-	this.stage.addChild(this.label);
 
 	this.name = "Particle";
 	this.x = 100;
@@ -29,6 +28,16 @@ var Particle = function (stage) {
 	this.elasticity = 0.4;
 	this.interactions = [{name:"repel", interacts_with: "Particle", direction: -1, range: 10*this.size, force:10}];
 };
+
+Particle.prototype.setPrintLabel = function(printLabel){
+	if(printLabel) {
+		this.printLabel = true;
+		this.stage.addChild(this.label);
+	} else {
+		this.printLabel = false;
+		this.stage.removeChild(this.label);
+	}
+}
 
 Particle.prototype.drawCircl = function(){
 	this.graphics.clear();
@@ -46,7 +55,6 @@ Particle.prototype.draw = function(){
 		this.label.text = this.id.toString();
 		this.label.x = this.x;
 		this.label.y = this.y;
-
 	}
 };
 
@@ -216,10 +224,10 @@ Graph.prototype.addGraph = function(graph) {
 	for (var u =0; u < graph.vertices.length; u++)
 	{
 		//if is not in the graph already:
-		if( this.vertices.indexOf(graph.vertices[u]) != -1) {
+		if( this.vertices.indexOf(graph.vertices[u]) == -1) {
 			this.vertices.push(graph.vertices[u]);
-			this.edges[graph.vertices[u]] =  graph.edges[graph.vertices[u]];
 		}
+		this.edges[graph.vertices[u]] =  graph.edges[graph.vertices[u]];
 	}
 }
 
