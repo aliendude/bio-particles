@@ -15,7 +15,7 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var draw_skipping = 0;
+	var draw_skipping = 6;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -107,17 +107,30 @@
 
 				var current_struct = structures[m];
 				//console.log("Number of structures: "+ structures.length);
-				for (var u =0; u < current_struct.vertices.length; u++)
+				for (var u = 0; u < current_struct.vertices.length; u++)
 				{
 					//console.log("Structure size: "+ current_struct.vertices.length);
 					//iterate over all vertice's edges:
 					for(var v = 0; v < current_struct.edges[current_struct.vertices[u]].length; v++) {
 						//check if the vertice is still touching with its edge
-						if(current_struct.vertices[u].getDistanceBoundaries(current_struct.edges[current_struct.vertices[u]][v]) > 8) {
+						var cur_vertex = current_struct.edges[current_struct.vertices[u]][v];
+						if(current_struct.vertices[u].getDistanceBoundaries(cur_vertex) > 8) {
 							//not touching anymore
-							//console.log("remove from graph");
-							current_struct.removeVertex(current_struct.edges[current_struct.vertices[u]][v]);
-							break;
+
+							//check if the current vertex has more edges
+							if(current_struct.edges[cur_vertex]){
+
+								if(current_struct.edges[cur_vertex].length > 1) {
+									current_struct.removeEdge(current_struct.vertices[u], cur_vertex);
+									current_struct.removeVertices(cur_vertex);
+
+								} else {
+									//console.log("remove from graph");
+									current_struct.removeVertex(cur_vertex);
+									//delete current_struct.edges[cur_vertex];
+									break;
+								}
+							}
 						}
 						
 					}

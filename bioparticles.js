@@ -208,6 +208,14 @@ Graph.prototype.addGraph = function(graph) {
 	}
 }
 
+Graph.prototype.removeVertices = function(v2) {
+ 	for (var i = 0; i < this.edges[v2].length; i++) {
+
+ 		this.removeVertex(this.edges[v2][i]);
+	}
+	this.removeVertex(v2);
+}
+
 Graph.prototype.addVertex = function(vertex) {
   this.vertices.push(vertex);
   this.edges[vertex] = [];
