@@ -16,6 +16,7 @@
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
 	var particle_id_counter = 0;
+	var draw_skipping = 1;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -153,23 +154,24 @@
 	particles.push(p);
 
 	// Listen for animate update
-	var frame_counter = 0;
 	app.ticker.add(function(delta) {
 
-		if(frame_counter % 1 == 0){
-			//graphics.clear();
-			for (var i = 0; i < particles.length; i++)
-			{
-				particles[i].draw();
-			}
-		}
-		
+		//graphics.clear();
 		for (var i = 0; i < particles.length; i++)
 		{
-			particles[i].move(canvas_size_x, canvas_size_y);
-			particles[i].processCollisions(particles);
+			particles[i].draw();
 		}
-		frame_counter +=1;
+
+		for( var x = 0; x <= draw_skipping; x++)
+		{
+			for (var i = 0; i < particles.length; i++)
+			{
+				particles[i].move(canvas_size_x, canvas_size_y);
+				//process magnetic forces and collisions:
+				particles[i].processCollisions(particles);
+
+			}
+		}
 	});
 </script>
 </body>
