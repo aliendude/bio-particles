@@ -15,7 +15,7 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var draw_skipping = 3;
+	var draw_skipping = 0;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -141,11 +141,10 @@
 									//console.log("remove from graph");
 									current_struct.graphics.clear();
 									current_struct.removeVertex(cur_vertex);
-									//break;
+									break;
 								}
 							}
 						}
-						
 					}
 				}
 				if (destroy) {
