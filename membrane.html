@@ -15,7 +15,7 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var draw_skipping = 6;
+	var draw_skipping = 5;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -24,9 +24,9 @@
 	var particles = [];
 	var particle_id_counter = 0;
 	var structures = [];
+	var n_structures = 0;
 
-
-	for (var i =0; i < 5; i++){
+	for (var i =0; i < 10; i++){
 		var p = new Particle(app.stage);
 		p.size = 10;
 		//p.size = 3;
@@ -97,16 +97,20 @@
 			particles[i].draw();
 		}
 
-		for( var x = 0; x <= draw_skipping; x++)
+		for( var ds = 0; ds <= draw_skipping; ds++)
 		{
 			//update graphs
 			//iterate over all structures
 			for (var m = 0; m < structures.length; m++) {
-				 structures[m].draw();
-
+				//	structures[m].draw();
 
 				var current_struct = structures[m];
-				//console.log("Number of structures: "+ structures.length);
+				var destroy = false;
+				// if(structures.length != n_structures)
+				// {
+				// 	console.log("Number of structures: "+ structures.length);
+				// 	n_structures = structures.length;
+				// }
 				for (var u = 0; u < current_struct.vertices.length; u++)
 				{
 					//console.log("Structure size: "+ current_struct.vertices.length);
@@ -118,24 +122,29 @@
 							//not touching anymore
 
 							//check if the current vertex has more edges
-							if(current_struct.edges[cur_vertex]){
+							if(current_struct.edges[cur_vertex]) {
 
 								if(current_struct.edges[cur_vertex].length > 1) {
-									current_struct.removeEdge(current_struct.vertices[u], cur_vertex);
-									current_struct.removeVertices(cur_vertex);
-
+									destroy = true;
 								} else {
 									//console.log("remove from graph");
+									current_struct.graphics.clear();
 									current_struct.removeVertex(cur_vertex);
-									//delete current_struct.edges[cur_vertex];
-									break;
+									//break;
 								}
 							}
 						}
 						
 					}
 				}
-				//structures[m].print();
+				if (destroy) {
+					structures[m].graphics.clear();
+					app.stage.removeChild(structures[m]);
+					structures.splice(m, 1);
+					//break;
+				} else {
+					structures[m].draw();
+				}
 			}
 
 			for (var i = 0; i < particles.length; i++)
