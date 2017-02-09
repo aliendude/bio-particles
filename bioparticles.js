@@ -1,12 +1,21 @@
 var Particle = function (stage) {
+	this.id = particle_id_counter;
+	particle_id_counter +=1;
 
 	this.stage = stage;
 	//the graphic object
 	this.graphics = new PIXI.Graphics();
 	this.stage.addChild(this.graphics);
+	
+	//text
+	this.printLabel = true;
+	var style = new PIXI.TextStyle({
+	    fontFamily: 'Arial',
+	    fontSize: 10,
+	});
+	this.label = new PIXI.Text(this.id.toString(), style);
+	this.stage.addChild(this.label);
 
-	this.id = particle_id_counter;
-	particle_id_counter +=1;
 	this.name = "Particle";
 	this.x = 100;
 	this.y = 100;
@@ -28,11 +37,17 @@ Particle.prototype.drawCircl = function(){
 	this.graphics.beginFill(this.color, 0.6);
 	this.graphics.drawCircle(this.x, this.y, this.size);
 	this.graphics.endFill();
-
 };
 
 Particle.prototype.draw = function(){
 	this.drawCircl();
+	if(this.printLabel){
+		//text
+		this.label.text = this.id.toString();
+		this.label.x = this.x;
+		this.label.y = this.y;
+
+	}
 };
 
 Particle.prototype.drawRect = function(){
@@ -43,7 +58,7 @@ Particle.prototype.drawRect = function(){
 	this.graphics.drawRect(this.x, this.y, this.size*2, this.size*2)
 	this.graphics.endFill();
 
-};
+}
 
 Particle.prototype.borderBounce = function(){
 	//bounce:
@@ -208,6 +223,7 @@ Graph.prototype.addGraph = function(graph) {
 	}
 }
 
+//not used yet:
 Graph.prototype.removeVertices = function(v2) {
  	for (var i = 0; i < this.edges[v2].length; i++) {
 
