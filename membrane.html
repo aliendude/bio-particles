@@ -15,7 +15,7 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var draw_skipping = 0;
+	var draw_skipping = 3;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -93,7 +93,6 @@
 	}
 	
 	// Listen for animate update
-	var frame_counter = 0;
 	app.ticker.add(function(delta) {
 		//graphics.clear();
 		for (var i = 0; i < particles.length; i++)
@@ -112,15 +111,15 @@
 				var destroy = false;
 
 				//this is just for debug:
-				if(structures.length != n_structures)
-				{
-					console.log("N structures: "+ structures.length);
-					n_structures = structures.length;
-					for (var s = 0; s < structures.length; s++) {
-					 	console.log("Structures size: "+ structures[s].vertices.length);
-					    structures[s].print();
-					}
-				}
+				// if(structures.length != n_structures)
+				// {
+				// 	console.log("N structures: "+ structures.length);
+				// 	n_structures = structures.length;
+				// 	for (var s = 0; s < structures.length; s++) {
+				// 	 	console.log("Structures size: "+ structures[s].vertices.length);
+				// 	    structures[s].print();
+				// 	}
+				// }
 
 				for (var u = 0; u < current_struct.vertices.length; u++)
 				{
@@ -140,6 +139,7 @@
 								} else {
 									//console.log("remove from graph");
 									current_struct.graphics.clear();
+									current_struct.removeEdge(current_struct.vertices[u], cur_vertex);
 									current_struct.removeVertex(cur_vertex);
 									break;
 								}
