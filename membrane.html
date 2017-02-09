@@ -15,7 +15,7 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var draw_skipping = 5;
+	var draw_skipping = 3;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -26,8 +26,9 @@
 	var structures = [];
 	var n_structures = 0;
 
-	for (var i =0; i < 10; i++){
+	for (var i =0; i < 5; i++){
 		var p = new Particle(app.stage);
+		p.setPrintLabel(true);
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
@@ -43,6 +44,7 @@
 		particles.push(p);
 
 		var p = new Particle(app.stage);
+		p.setPrintLabel(true);
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
@@ -58,6 +60,7 @@
 		particles.push(p);
 
 		var p = new Particle(app.stage);
+		p.setPrintLabel(true);
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
@@ -73,6 +76,7 @@
 		particles.push(p);
 
 		var p = new Particle(app.stage);
+		p.setPrintLabel(true);
 		p.size = 10;
 		//p.size = 3;
 		p.mass = p.size;
@@ -106,11 +110,18 @@
 
 				var current_struct = structures[m];
 				var destroy = false;
-				// if(structures.length != n_structures)
-				// {
-				// 	console.log("Number of structures: "+ structures.length);
-				// 	n_structures = structures.length;
-				// }
+
+				//this is just for debug:
+				if(structures.length != n_structures)
+				{
+					console.log("N structures: "+ structures.length);
+					n_structures = structures.length;
+					for (var s = 0; s < structures.length; s++) {
+					 	console.log("Structures size: "+ structures[s].vertices.length);
+					    structures[s].print();
+					}
+				}
+
 				for (var u = 0; u < current_struct.vertices.length; u++)
 				{
 					//console.log("Structure size: "+ current_struct.vertices.length);
@@ -151,7 +162,6 @@
 			{
 				particles[i].move(canvas_size_x, canvas_size_y);
 				particles[i].processCollisions(particles);
-
 
 				//process collisions to generate graphs:
 				for (var j = 0; j < particles.length; j++) {
