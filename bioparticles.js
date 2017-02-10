@@ -70,7 +70,7 @@ Particle.prototype.drawRect = function(){
 
 Particle.prototype.borderBounce = function(){
 	//bounce:
-	var border_bounce_energy = 1.5; 
+	var border_bounce_energy = 1.3; 
 	if(this.x + this.size > canvas_size_x ) this.vel[0] -= this.mass * border_bounce_energy;
 	if(this.x - this.size < 0) this.vel[0] +=  this.mass * border_bounce_energy;
 	if(this.y + this.size > canvas_size_y ) this.vel[1] -=  this.mass * border_bounce_energy;

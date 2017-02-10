@@ -16,7 +16,7 @@
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
 	//draw every n movements
-	var draw_skipping = 4;
+	var draw_skipping = 0;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -24,7 +24,8 @@
 	//initialize particles
 	var particles = [];
 	var particle_id_counter = 0;
-
+	var structures = [];
+	var n_structures = 0;
 	for (var i = 0; i <80; i++)
 	{
 		var p = new Particle(app.stage);
@@ -36,10 +37,10 @@
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
 		p.name = "A";
-		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: 10*p.size, force:5},
-						  {name:"repel", interacts_with: "C", direction: 1, range: 10*p.size, force:5},
-						  {name:"attract", interacts_with: "B", direction: -1, range: 10* p.size, force:5},
-						  {name:"attract", interacts_with: "D", direction: -1, range: 10* p.size, force:5},];
+		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: 10*p.size, force:7},
+						  {name:"repel", interacts_with: "C", direction: 1, range: 10*p.size, force:7},
+						  {name:"attract", interacts_with: "B", direction: -1, range: 10* p.size, force:7},
+						  {name:"attract", interacts_with: "D", direction: -1, range: 10* p.size, force:7},];
 		particles.push(p);
 	}
 
@@ -54,10 +55,10 @@
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
 		p.name = "B";
-		p.interactions = [{name:"repel", interacts_with: "B", direction: 1, range: 10*p.size, force:5},
-						  {name:"repel", interacts_with: "D", direction: 1, range: 10*p.size, force:5},
-						  {name:"attract", interacts_with: "C", direction: -1, range: 10* p.size, force:5},
-						  {name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:5}];
+		p.interactions = [{name:"repel", interacts_with: "B", direction: 1, range: 10*p.size, force:7},
+						  {name:"repel", interacts_with: "D", direction: 1, range: 10*p.size, force:7},
+						  {name:"attract", interacts_with: "C", direction: -1, range: 10* p.size, force:7},
+						  {name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:7}];
 		particles.push(p);
 	}
 
@@ -72,10 +73,10 @@
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
 		p.name = "C";
-		p.interactions = [{name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:5},
-						  {name:"repel", interacts_with: "A", direction: 1, range: 10* p.size, force:5},
-						  {name:"attract", interacts_with: "D", direction: -1, range: 10*p.size, force:5},
-						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:5}];
+		p.interactions = [{name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:7},
+						  {name:"repel", interacts_with: "A", direction: 1, range: 10* p.size, force:7},
+						  {name:"attract", interacts_with: "D", direction: -1, range: 10*p.size, force:7},
+						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:7}];
 		particles.push(p);
 	}
 	for (var i = 0; i < 80; i++)
@@ -89,10 +90,10 @@
 		p.y = Math.floor((Math.random() * canvas_size_y - p.size) + p.size);
 		p.vel = [Math.floor((Math.random() * 8) + 1)*getRandSymbol(), Math.floor((Math.random() * 8) + 1)*getRandSymbol()];
 		p.name = "D";
-		p.interactions = [{name:"repel", interacts_with: "D", direction: 1, range: 10* p.size, force:5},
-						  {name:"repel", interacts_with: "B", direction: 1, range: 10* p.size, force:5},
-						  {name:"attract", interacts_with: "A", direction: -1, range: 10*p.size, force:5},
-						  {name:"attract", interacts_with: "C", direction: -1, range: 10*p.size, force:5}];
+		p.interactions = [{name:"repel", interacts_with: "D", direction: 1, range: 10* p.size, force:7},
+						  {name:"repel", interacts_with: "B", direction: 1, range: 10* p.size, force:7},
+						  {name:"attract", interacts_with: "A", direction: -1, range: 10*p.size, force:7},
+						  {name:"attract", interacts_with: "C", direction: -1, range: 10*p.size, force:7}];
 		particles.push(p);
 	}
 
@@ -162,20 +163,171 @@
 	// }
 	// Listen for animate update
 	app.ticker.add(function(delta) {
-
 		//graphics.clear();
-		for (var i = 0; i < particles.length; i++)
-		{
-			particles[i].draw();
+		for (var i = 0; i < particles.length; i++) {
+			//particles[i].draw();
+		}
+		for (var i =0; i < structures.length; i++) {
+			structures[i].draw();
 		}
 
-		for( var x = 0; x <= draw_skipping; x++)
+		for( var ds = 0; ds <= draw_skipping; ds++)
 		{
+			//update graphs
+			//iterate over all structures
+			for (var m = 0; m < structures.length; m++) {
+				//	structures[m].draw();
+
+				var current_struct = structures[m];
+				var destroy = false;
+
+				//this is just for debug:
+				// if(structures.length != n_structures)
+				// {
+				// 	console.log("N structures: "+ structures.length);
+				// 	n_structures = structures.length;
+				// 	for (var s = 0; s < structures.length; s++) {
+				// 	 	console.log("Structures size: "+ structures[s].vertices.length);
+				// 	    structures[s].print();
+				// 	}
+				// }
+
+				for (var u = 0; u < current_struct.vertices.length; u++)
+				{
+					//console.log("Structure size: "+ current_struct.vertices.length);
+					//iterate over all vertice's edges:
+					for(var v = 0; v < current_struct.edges[current_struct.vertices[u]].length; v++) {
+						//check if the vertice is still touching with its edge
+						var cur_vertex = current_struct.edges[current_struct.vertices[u]][v];
+						if(current_struct.vertices[u].getDistanceBoundaries(cur_vertex) > 8) {
+							//not touching anymore
+
+							//check if the current vertex has more edges
+							if(current_struct.edges[cur_vertex]) {
+
+								if(current_struct.edges[cur_vertex].length > 1) {
+									destroy = true;
+								} else {
+									//console.log("remove from graph");
+									//current_struct.graphics.clear();
+									current_struct.removeEdge(current_struct.vertices[u], cur_vertex);
+									current_struct.removeVertex(cur_vertex);
+									break;
+								}
+							}
+						}
+					}
+				}
+				if (destroy) {
+					structures[m].graphics.clear();
+					app.stage.removeChild(structures[m]);
+					structures.splice(m, 1);
+					//break;
+				}
+			}
+
+			//move particles and generate new graphs
 			for (var i = 0; i < particles.length; i++)
 			{
+				// //modify interarctions if particle belongs to structure
+				// if(particleBelongsToStructure(structures, particles[i])){
+				// 	//particles[i].mass = 5;
+				// 	for(var k=0; k< particles[i].interactions.length;k++){
+				// 		particles[i].interactions[k].range = 70;
+				// 		particles[i].interactions[k].force = 7;
+				// 	}
+				// }
+				// else
+				// {
+				// 	for(var k=0; k< particles[i].interactions.length;k++){
+				// 		particles[i].interactions[k].range = 100;
+				// 		particles[i].interactions[k].force = 10;
+				// 	}
+				// 	//particles[i].mass = 10;
+				// }
 				particles[i].move(canvas_size_x, canvas_size_y);
-				//process magnetic forces and collisions:
 				particles[i].processCollisions(particles);
+
+				//process collisions to generate graphs:
+				for (var j = 0; j < particles.length; j++) {
+					//skip current particle
+					if(i != j) {
+						if(particles[i].getDistanceBoundaries(particles[j]) <= 0) {
+
+							var belongs_to_structure = false;
+							for (var m = 0; m < structures.length; m++){	
+
+								//check if the i particle belongs to the structure
+								if( structures[m].vertices.indexOf(particles[i]) != -1) {
+									//the graph contains the first vertex
+									belongs_to_structure = true;
+									//check if contains the second vertex:
+									if(structures[m].vertices.indexOf(particles[j]) == -1) {
+										//the graph doesn't contain the second vertex
+										var sec_belongs_to_struc = false;
+										//check if other structure contains the second vertex
+										for(var g = 0; g < structures.length; g++){
+											//skip the current structure
+											if(g != m ) {
+												if(structures[g].vertices.indexOf(particles[j]) != -1) {
+													//the structure contains the second vertex
+													sec_belongs_to_struc = true;
+													
+													//new edge
+													structures[m].addVertex(particles[j]);
+													structures[m].addEdge(particles[i], particles[j]);
+
+													//time to sum the graphs
+													structures[m].addGraph(structures[g]);
+													//clean and delete
+													//todo: this may cause some trouble with structures:
+													structures[g].graphics.clear();
+													structures.splice(g, 1);
+													break;													
+												}
+											}
+										}
+										
+										if(!sec_belongs_to_struc){
+											//if the second vertex doesn't belong to any structure
+											structures[m].addVertex(particles[j]);
+											structures[m].addEdge(particles[i], particles[j]);
+											
+										}
+									}
+								}
+							}
+							if (!belongs_to_structure) {
+								//check if other structure contains the second vertex
+								var sec_belongs_to_struc = false;
+								for(var g = 0; g < structures.length; g++){
+									//skip the current structure
+									
+									if(structures[g].vertices.indexOf(particles[j]) != -1) {
+										//the structure contains the second vertex
+										sec_belongs_to_struc = true;
+										
+										//new edge
+										structures[g].addVertex(particles[i]);
+										structures[g].addEdge(particles[j], particles[i]);
+									}
+									
+
+								}
+								if(!sec_belongs_to_struc){
+									//if the second vertex doesn't belong to any structure
+									var new_struct = new Graph(app.stage);
+									new_struct.addVertex(particles[i]);
+									new_struct.addVertex(particles[j]);
+									new_struct.addEdge(particles[i], particles[j]);
+
+									structures.push(new_struct);
+									
+								}
+							}
+						}
+					}
+				}
 
 			}
 		}

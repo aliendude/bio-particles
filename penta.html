@@ -37,7 +37,7 @@
 	var structures = [];
 	var n_structures = 0;
 
-	for (var i =0; i < 5; i++){
+	for (var i =0; i < ; i++){
 		var p = new Particle(app.stage);
 		p.setPrintLabel(true);
 		p.size = 10;
@@ -48,10 +48,11 @@
 		p.y = canvas_size_y/2 -10 -50*i;
 		p.vel =[0,0];
 		p.name = "A";
-		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: 10*p.size, force:7},
-						  {name:"repel", interacts_with: "C", direction: 1, range: 10*p.size, force:7},
-						  {name:"attract", interacts_with: "B", direction: -1, range: 10* p.size, force:7},
-						  {name:"attract", interacts_with: "D", direction: -1, range: 10* p.size, force:7},];
+		p.interactions = [{name:"repel", interacts_with: "A", direction: 1, range: 10*p.size, force:10},
+						  {name:"repel", interacts_with: "C", direction: 1, range: 10*p.size, force:10},
+						  {name:"repel", interacts_with: "D", direction: 1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "B", direction: -1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "E", direction: -1, range: 10* p.size, force:10},];
 		particles.push(p);
 
 		var p = new Particle(app.stage);
@@ -64,10 +65,11 @@
 		p.y = canvas_size_y/2 -20 -50*i;
 		p.vel =[0,0];
 		p.name = "B";
-		p.interactions = [{name:"repel", interacts_with: "B", direction: 1, range: 10*p.size, force:7},
-						  {name:"repel", interacts_with: "D", direction: 1, range: 10*p.size, force:7},
-						  {name:"attract", interacts_with: "C", direction: -1, range: 10* p.size, force:7},
-						  {name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:7}];
+		p.interactions = [{name:"repel", interacts_with: "B", direction: 1, range: 10*p.size, force:10},
+						  {name:"repel", interacts_with: "D", direction: 1, range: 10*p.size, force:10},
+						  {name:"repel", interacts_with: "E", direction: 1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "C", direction: -1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:10}];
 		particles.push(p);
 
 		var p = new Particle(app.stage);
@@ -80,10 +82,11 @@
 		p.y = canvas_size_y/2 -30 -50*i;
 		p.vel =[0,0];
 		p.name = "C";
-		p.interactions = [{name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:7},
-						  {name:"repel", interacts_with: "A", direction: 1, range: 10* p.size, force:7},
-						  {name:"attract", interacts_with: "D", direction: -1, range: 10*p.size, force:7},
-						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:7}];
+		p.interactions = [{name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:10},
+						  {name:"repel", interacts_with: "A", direction: 1, range: 10* p.size, force:10},
+						  {name:"repel", interacts_with: "E", direction: 1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "D", direction: -1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "B", direction: -1, range: 10*p.size, force:10}];
 		particles.push(p);
 
 		var p = new Particle(app.stage);
@@ -96,10 +99,28 @@
 		p.y = canvas_size_y/2 -40 -50*i;
 		p.vel =[0,0];
 		p.name = "D";
-		p.interactions = [{name:"repel", interacts_with: "D", direction: 1, range: 10* p.size, force:7},
-						  {name:"repel", interacts_with: "B", direction: 1, range: 10* p.size, force:7},
-						  {name:"attract", interacts_with: "A", direction: -1, range: 10*p.size, force:7},
-						  {name:"attract", interacts_with: "C", direction: -1, range: 10*p.size, force:7}];
+		p.interactions = [{name:"repel", interacts_with: "D", direction: 1, range: 10* p.size, force:10},
+						  {name:"repel", interacts_with: "B", direction: 1, range: 10* p.size, force:10},
+						  {name:"repel", interacts_with: "A", direction: 1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "E", direction: -1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "C", direction: -1, range: 10*p.size, force:10}];
+		particles.push(p);
+
+		var p = new Particle(app.stage);
+		p.setPrintLabel(true);
+		p.size = 10;
+		//p.size = 3;
+		p.mass = p.size;
+		p.color = 0x557f00;
+		p.x = 130 + (90*i);
+		p.y = canvas_size_y/2 -40 -50*i;
+		p.vel =[0,0];
+		p.name = "E";
+		p.interactions = [{name:"repel", interacts_with: "E", direction: 1, range: 10* p.size, force:10},
+						  {name:"repel", interacts_with: "B", direction: 1, range: 10* p.size, force:10},
+						  {name:"repel", interacts_with: "C", direction: 1, range: 10* p.size, force:10},
+						  {name:"attract", interacts_with: "A", direction: -1, range: 10*p.size, force:10},
+						  {name:"attract", interacts_with: "D", direction: -1, range: 10*p.size, force:10}];
 		particles.push(p);
 	}
 	
