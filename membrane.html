@@ -15,7 +15,7 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var draw_skipping = 3;
+	var draw_skipping = 10;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -94,12 +94,16 @@
 	
 	// Listen for animate update
 	app.ticker.add(function(delta) {
+		//graphics.clear();
+		for (var i = 0; i < particles.length; i++) {
+			particles[i].draw();
+		}
+		for (var i =0; i < structures.length; i++) {
+			structures[i].draw();
+		}
+
 		for( var ds = 0; ds <= draw_skipping; ds++)
 		{
-			for (var i = 0; i < particles.length; i++)
-			{
-				particles[i].draw();
-			}
 			//update graphs
 			//iterate over all structures
 			for (var m = 0; m < structures.length; m++) {
@@ -150,8 +154,6 @@
 					app.stage.removeChild(structures[m]);
 					structures.splice(m, 1);
 					//break;
-				} else {
-					structures[m].draw();
 				}
 			}
 
