@@ -94,14 +94,12 @@
 	
 	// Listen for animate update
 	app.ticker.add(function(delta) {
-		//graphics.clear();
-		for (var i = 0; i < particles.length; i++)
-		{
-			particles[i].draw();
-		}
-
 		for( var ds = 0; ds <= draw_skipping; ds++)
 		{
+			for (var i = 0; i < particles.length; i++)
+			{
+				particles[i].draw();
+			}
 			//update graphs
 			//iterate over all structures
 			for (var m = 0; m < structures.length; m++) {
