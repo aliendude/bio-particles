@@ -15,7 +15,7 @@
 
 	var canvas_size_x = 1200;
 	var canvas_size_y = 600;
-	var draw_skipping = 10;
+	var draw_skipping = 3;
 
 	var app = new PIXI.Application(canvas_size_x, canvas_size_y, { antialias: true, backgroundColor : 0xffffff});
 	document.body.appendChild(app.view);
@@ -140,7 +140,7 @@
 									destroy = true;
 								} else {
 									//console.log("remove from graph");
-									current_struct.graphics.clear();
+									//current_struct.graphics.clear();
 									current_struct.removeEdge(current_struct.vertices[u], cur_vertex);
 									current_struct.removeVertex(cur_vertex);
 									break;
@@ -157,6 +157,7 @@
 				}
 			}
 
+			//move particles and generate new graphs
 			for (var i = 0; i < particles.length; i++)
 			{
 				particles[i].move(canvas_size_x, canvas_size_y);
@@ -194,7 +195,7 @@
 													//time to sum the graphs
 													structures[m].addGraph(structures[g]);
 													//clean and delete
-													//todo: this may cause some trouble woth structures:
+													//todo: this may cause some trouble with structures:
 													structures[g].graphics.clear();
 													structures.splice(g, 1);
 													break;													
