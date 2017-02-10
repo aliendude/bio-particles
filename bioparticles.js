@@ -10,8 +10,8 @@ var Particle = function (stage) {
 	//text
 	this.printLabel = false;
 	var style = new PIXI.TextStyle({
-	    fontFamily: 'Arial',
-	    fontSize: 10,
+		fontFamily: 'Arial',
+		fontSize: 10,
 	});
 	this.label = new PIXI.Text(this.id.toString(), style);
 
@@ -119,25 +119,25 @@ Particle.prototype.getDistanceCenter = function(p){
 
 Particle.prototype.elasticBounce = function(p2) {
 	//ellastic newtonian collision
-    var dx = this.x-p2.x;
-    var dy = this.y-p2.y;
-    var collisionision_angle = Math.atan2(dy, dx);
-    var magnitude_1 = Math.sqrt(this.vel[0]*this.vel[0]+this.vel[1]*this.vel[1]);
-    var magnitude_2 = Math.sqrt(p2.vel[0]*p2.vel[0]+p2.vel[1]*p2.vel[1]);
-    var direction_1 = Math.atan2(this.vel[1], this.vel[0]);
-    var direction_2 = Math.atan2(p2.vel[1], p2.vel[0]);
-    var new_xspeed_1 = magnitude_1*Math.cos(direction_1-collisionision_angle);
-    var new_yspeed_1 = magnitude_1*Math.sin(direction_1-collisionision_angle);
-    var new_xspeed_2 = magnitude_2*Math.cos(direction_2-collisionision_angle);
-    var new_yspeed_2 = magnitude_2*Math.sin(direction_2-collisionision_angle);
-    var final_xspeed_1 = ((this.mass-p2.mass)*new_xspeed_1+(p2.mass+p2.mass)*new_xspeed_2)/(this.mass+p2.mass);
-    var final_xspeed_2 = ((this.mass+this.mass)*new_xspeed_1+(p2.mass-this.mass)*new_xspeed_2)/(this.mass+p2.mass);
-    var final_yspeed_1 = new_yspeed_1;
-    var final_yspeed_2 = new_yspeed_2;
-    this.vel[0] = this.elasticity*(Math.cos(collisionision_angle)*final_xspeed_1+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_1);
-    this.vel[1] = this.elasticity*(Math.sin(collisionision_angle)*final_xspeed_1+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_1);
-    p2.vel[0] = p2.elasticity*(Math.cos(collisionision_angle)*final_xspeed_2+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_2);
-    p2.vel[1] = p2.elasticity*(Math.sin(collisionision_angle)*final_xspeed_2+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_2);
+	var dx = this.x-p2.x;
+	var dy = this.y-p2.y;
+	var collisionision_angle = Math.atan2(dy, dx);
+	var magnitude_1 = Math.sqrt(this.vel[0]*this.vel[0]+this.vel[1]*this.vel[1]);
+	var magnitude_2 = Math.sqrt(p2.vel[0]*p2.vel[0]+p2.vel[1]*p2.vel[1]);
+	var direction_1 = Math.atan2(this.vel[1], this.vel[0]);
+	var direction_2 = Math.atan2(p2.vel[1], p2.vel[0]);
+	var new_xspeed_1 = magnitude_1*Math.cos(direction_1-collisionision_angle);
+	var new_yspeed_1 = magnitude_1*Math.sin(direction_1-collisionision_angle);
+	var new_xspeed_2 = magnitude_2*Math.cos(direction_2-collisionision_angle);
+	var new_yspeed_2 = magnitude_2*Math.sin(direction_2-collisionision_angle);
+	var final_xspeed_1 = ((this.mass-p2.mass)*new_xspeed_1+(p2.mass+p2.mass)*new_xspeed_2)/(this.mass+p2.mass);
+	var final_xspeed_2 = ((this.mass+this.mass)*new_xspeed_1+(p2.mass-this.mass)*new_xspeed_2)/(this.mass+p2.mass);
+	var final_yspeed_1 = new_yspeed_1;
+	var final_yspeed_2 = new_yspeed_2;
+	this.vel[0] = this.elasticity*(Math.cos(collisionision_angle)*final_xspeed_1+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_1);
+	this.vel[1] = this.elasticity*(Math.sin(collisionision_angle)*final_xspeed_1+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_1);
+	p2.vel[0] = p2.elasticity*(Math.cos(collisionision_angle)*final_xspeed_2+Math.cos(collisionision_angle+Math.PI/2)*final_yspeed_2);
+	p2.vel[1] = p2.elasticity*(Math.sin(collisionision_angle)*final_xspeed_2+Math.sin(collisionision_angle+Math.PI/2)*final_yspeed_2);
 }
 
 Particle.prototype.processCollisions = function(other_particles) {
@@ -185,12 +185,12 @@ Particle.prototype.processCollisions = function(other_particles) {
 	}
 }
 Particle.prototype.toString = function () {
-  return this.id
+	return this.id
 }
 
 
 function Graph(stage) {
-  this.stage = stage;
+	this.stage = stage;
   //the graphic object
   this.graphics = new PIXI.Graphics();
   this.stage.addChild(this.graphics);
@@ -233,121 +233,121 @@ Graph.prototype.addGraph = function(graph) {
 
 //not used yet:
 Graph.prototype.removeVertices = function(v2) {
- 	for (var i = 0; i < this.edges[v2].length; i++) {
+	for (var i = 0; i < this.edges[v2].length; i++) {
 
- 		this.removeVertex(this.edges[v2][i]);
+		this.removeVertex(this.edges[v2][i]);
 	}
 	this.removeVertex(v2);
 }
 
 Graph.prototype.addVertex = function(vertex) {
-  this.vertices.push(vertex);
-  this.edges[vertex] = [];
+	this.vertices.push(vertex);
+	this.edges[vertex] = [];
 };
 Graph.prototype.removeVertex = function(vertex) {
-  var index = this.vertices.indexOf(vertex);
-  if(~index) {
-    this.vertices.splice(index, 1);
-  }
-  while(this.edges[vertex].length) {
-    var adjacentVertex = this.edges[vertex].pop();
-    this.removeEdge(adjacentVertex, vertex);
-  }
+	var index = this.vertices.indexOf(vertex);
+	if(~index) {
+		this.vertices.splice(index, 1);
+	}
+	while(this.edges[vertex].length) {
+		var adjacentVertex = this.edges[vertex].pop();
+		this.removeEdge(adjacentVertex, vertex);
+	}
 };
 Graph.prototype.addEdge = function(vertex1, vertex2) {
-  this.edges[vertex1].push(vertex2);
-  this.edges[vertex2].push(vertex1);
-  this.numberOfEdges++;
+	this.edges[vertex1].push(vertex2);
+	this.edges[vertex2].push(vertex1);
+	this.numberOfEdges++;
 };
 Graph.prototype.removeEdge = function(vertex1, vertex2) {
-  var index1 = this.edges[vertex1] ? this.edges[vertex1].indexOf(vertex2) : -1;
-  var index2 = this.edges[vertex2] ? this.edges[vertex2].indexOf(vertex1) : -1;
-  if(~index1) {
-    this.edges[vertex1].splice(index1, 1);
-    this.numberOfEdges--;
-  }
-  if(~index2) {
-    this.edges[vertex2].splice(index2, 1);
-  }
+	var index1 = this.edges[vertex1] ? this.edges[vertex1].indexOf(vertex2) : -1;
+	var index2 = this.edges[vertex2] ? this.edges[vertex2].indexOf(vertex1) : -1;
+	if(~index1) {
+		this.edges[vertex1].splice(index1, 1);
+		this.numberOfEdges--;
+	}
+	if(~index2) {
+		this.edges[vertex2].splice(index2, 1);
+	}
 };
 Graph.prototype.size = function() {
-  return this.vertices.length;
+	return this.vertices.length;
 };
 Graph.prototype.relations = function() {
-  return this.numberOfEdges;
+	return this.numberOfEdges;
 };
 Graph.prototype.traverseDFS = function(vertex, fn) {
-  if(!~this.vertices.indexOf(vertex)) {
-    return console.log('Vertex not found');
-  }
-  var visited = [];
-  this._traverseDFS(vertex, visited, fn);
+	if(!~this.vertices.indexOf(vertex)) {
+		return console.log('Vertex not found');
+	}
+	var visited = [];
+	this._traverseDFS(vertex, visited, fn);
 };
 Graph.prototype._traverseDFS = function(vertex, visited, fn) {
-  visited[vertex] = true;
-  if(this.edges[vertex] !== undefined) {
-    fn(vertex);
-  }
-  for(var i = 0; i < this.edges[vertex].length; i++) {
-    if(!visited[this.edges[vertex][i]]) {
-      this._traverseDFS(this.edges[vertex][i], visited, fn);
-    }
-  }
+	visited[vertex] = true;
+	if(this.edges[vertex] !== undefined) {
+		fn(vertex);
+	}
+	for(var i = 0; i < this.edges[vertex].length; i++) {
+		if(!visited[this.edges[vertex][i]]) {
+			this._traverseDFS(this.edges[vertex][i], visited, fn);
+		}
+	}
 };
 Graph.prototype.traverseBFS = function(vertex, fn) {
-  if(!~this.vertices.indexOf(vertex)) {
-    return console.log('Vertex not found');
-  }
-  var queue = [];
-  queue.push(vertex);
-  var visited = [];
-  visited[vertex] = true;
+	if(!~this.vertices.indexOf(vertex)) {
+		return console.log('Vertex not found');
+	}
+	var queue = [];
+	queue.push(vertex);
+	var visited = [];
+	visited[vertex] = true;
 
-  while(queue.length) {
-    vertex = queue.shift();
-    fn(vertex);
-    for(var i = 0; i < this.edges[vertex].length; i++) {
-      if(!visited[this.edges[vertex][i]]) {
-        visited[this.edges[vertex][i]] = true;
-        queue.push(this.edges[vertex][i]);
-      }
-    }
-  }
+	while(queue.length) {
+		vertex = queue.shift();
+		fn(vertex);
+		for(var i = 0; i < this.edges[vertex].length; i++) {
+			if(!visited[this.edges[vertex][i]]) {
+				visited[this.edges[vertex][i]] = true;
+				queue.push(this.edges[vertex][i]);
+			}
+		}
+	}
 };
 Graph.prototype.pathFromTo = function(vertexSource, vertexDestination) {
-  if(!~this.vertices.indexOf(vertexSource)) {
-    return console.log('Vertex not found');
-  }
-  var queue = [];
-  queue.push(vertexSource);
-  var visited = [];
-  visited[vertexSource] = true;
-  var paths = [];
+	if(!~this.vertices.indexOf(vertexSource)) {
+		return console.log('Vertex not found');
+	}
+	var queue = [];
+	queue.push(vertexSource);
+	var visited = [];
+	visited[vertexSource] = true;
+	var paths = [];
 
-  while(queue.length) {
-    var vertex = queue.shift();
-    for(var i = 0; i < this.edges[vertex].length; i++) {
-      if(!visited[this.edges[vertex][i]]) {
-        visited[this.edges[vertex][i]] = true;
-        queue.push(this.edges[vertex][i]);
+	while(queue.length) {
+		var vertex = queue.shift();
+		for(var i = 0; i < this.edges[vertex].length; i++) {
+			if(!visited[this.edges[vertex][i]]) {
+				visited[this.edges[vertex][i]] = true;
+				queue.push(this.edges[vertex][i]);
         // save paths between vertices
         paths[this.edges[vertex][i]] = vertex;
-      }
     }
-  }
-  if(!visited[vertexDestination]) {
-    return undefined;
-  }
+}
+}
+if(!visited[vertexDestination]) {
+	return undefined;
+}
 
-  var path = [];
-  for(var j = vertexDestination; j != vertexSource; j = paths[j]) {
-    path.push(j);
-  }
-  path.push(j);
-  return path.reverse().join('-');
+var path = [];
+for(var j = vertexDestination; j != vertexSource; j = paths[j]) {
+	path.push(j);
+}
+path.push(j);
+return path.reverse().join('-');
 };
 Graph.prototype.print = function() {
-  console.log(this.vertices.map(function(vertex) {
-    return (vertex + ' -> ' + this.edges[vertex].join(', ')).trim();
-  }, this).join(' | '));
+	console.log(this.vertices.map(function(vertex) {
+		return (vertex + ' -> ' + this.edges[vertex].join(', ')).trim();
+	}, this).join(' | '));
 };
