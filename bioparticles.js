@@ -5,8 +5,14 @@ var Particle = function (stage) {
 	this.stage = stage;
 	//the graphic object
 	this.graphics = new PIXI.Graphics();
+	this.graphics.interactive = true;
+	//this.graphics.buttonMode = true;
+	// this.graphics.on('pointerdown', this.onDragStart)
+	// 			.on("pointerupoutside", this.onDragEnd)
+	// 			.on('pointerup', this.onDragEnd) 
+	// 			.on('pointermove', this.onDragMove);
+	//this.graphics.anchor.set(0.0);
 	this.stage.addChild(this.graphics);
-	
 	//text
 	this.printLabel = false;
 	var style = new PIXI.TextStyle({
@@ -26,10 +32,40 @@ var Particle = function (stage) {
 	this.friction = 0.0;
 	//percentage of velocity conserved in a bounce:
 	this.elasticity = 0.4;
+	this.dragging = false;
 	this.interactions = [{name:"repel", interacts_with: "Particle", direction: -1, range: 10*this.size, force:10}];
-};
+}
+// Particle.prototype.onDragStart = function(event) {
+// 	this.event_data = event.data;
+// 	this.dragging = true;
+// }
+// Particle.prototype.onDragEnd = function() {
+// 	this.dragging = false;
+// 	this.event_data = null;
+// }
+// Particle.prototype.onDragMove = function() {
+// 	if (this.dragging) {
+// 		var newPosition = this.event_data.getLocalPosition(this.parent);
+//         this.x = newPosition.x;
+//         this.y = newPosition.y;
+//         console.log("--"+this.x+","+this.y);
+// 	}
+// }
 
-Particle.prototype.setPrintLabel = function(printLabel){
+Particle.prototype.pointBelongsToParticle = function(x, y) {
+	// console.log("particle "+this.x+","+this.y);
+	// console.log("click "+x+","+y);
+	// console.log("distance "+this.getDistanceBoundaries({x:x, y:y, size:0}));
+	if(this.getDistanceBoundaries({x:x, y:y, size:0}) <= 0.0) {
+		// console.log("belongs!");
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+Particle.prototype.setPrintLabel = function(printLabel) {
 	if(printLabel) {
 		this.printLabel = true;
 		this.stage.addChild(this.label);
@@ -44,11 +80,18 @@ Particle.prototype.drawCircl = function(){
 	// draw a circle, set the lineStyle to zero so the circle doesn't have an outline
 	this.graphics.lineStyle(0);
 	this.graphics.beginFill(this.color, 0.6);
+	//console.log("##"this.x+","+this.y);
 	this.graphics.drawCircle(this.x, this.y, this.size);
+	if(this.dragging) {
+		this.graphics.beginFill(0xff0000, 0.3);
+		//console.log("##"this.x+","+this.y);
+		this.graphics.drawCircle(this.x, this.y, this.size);
+	}
 	this.graphics.endFill();
 };
 
 Particle.prototype.draw = function(){
+	//console.log("//"+this.x+","+this.y);
 	this.drawCircl();
 	if(this.printLabel){
 		//text
@@ -91,16 +134,19 @@ Particle.prototype.borderInteraction = function(){
 }
 Particle.prototype.move = function(canvas_size_x, canvas_size_y){
 
+	if(!this.dragging){
 
-	//apply velocity:
-	this.x += this.vel[0];
-	this.y += this.vel[1];
-	//apply friction:
-	if (this.vel[0] != 0) this.vel[0] -= this.vel[0]*this.friction;
-	if (this.vel[1] != 0) this.vel[1] -= this.vel[1]*this.friction;
+		//console.log("++"+this.x+","+this.y);
+		//apply velocity:
+		this.x += this.vel[0];
+		this.y += this.vel[1];
+		//apply friction:
+		if (this.vel[0] != 0) this.vel[0] -= this.vel[0]*this.friction;
+		if (this.vel[1] != 0) this.vel[1] -= this.vel[1]*this.friction;
 
-	//borders 
-	this.borderInteraction();
+		//borders 
+		this.borderInteraction();
+	}
 
 };
 
@@ -156,7 +202,7 @@ Particle.prototype.processCollisions = function(other_particles) {
 					//if is colliding and is repeling the other particle 
 					if(distance_boundaries < 0 ){
 						if(this.interactions[l].direction < 0){
-							//console.log("collision");
+							//pointerconsole.log("collision");
 							this.elasticBounce(other_particles[j]);
 						} else {
 							//do the bounce but also push the force

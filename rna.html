@@ -86,18 +86,23 @@
 						  {name:"attract", interacts_with: "C", direction: -1, range: 10*p.size, force:5}];
 		particles.push(p);
 
-		// var p = new Particle(app.stage);
-		// p.size = 3;
-		// //p.size = 3;
-		// p.mass = p.size*1.9;
-		// p.color = 0xf37406;
-		// p.x = canvas_size_x/2 +24 + 32*i;
-		// p.y = canvas_size_y/2 + 9;
-		// p.vel =[0,0];
-		// p.name = "a";
-		// p.interactions = [{name:"attract", interacts_with: "A", direction: -1, range: 10* p.mass, force:10},
-		// 				  {name:"repel", interacts_with: "a", direction: 1, range: 10* p.mass, force:10}];
-		// particles.push(p);
+		var p = new Particle(app.stage);
+		p.size = 3;
+		//p.size = 3;
+		p.mass = p.size*1.9;
+		p.color = 0x000000;
+		p.x = canvas_size_x/2 +24 + 32*i;
+		p.y = canvas_size_y/2 + 50;
+		p.vel =[0,0];
+		p.name = "a";
+		p.interactions = [{name:"attract", interacts_with: "A", direction: -1, range: 10* p.size, force:5},
+						  {name:"repel", interacts_with: "B", direction: 1, range: p.size-1, force:5},
+						  {name:"repel", interacts_with: "C", direction: 1, range: p.size-1, force:5},
+						  {name:"repel", interacts_with: "D", direction: 1, range: p.size-1, force:5},
+						  {name:"repel", interacts_with: "E", direction: 1, range: p.size-1, force:5},
+						  {name:"repel", interacts_with: "a", direction: 1, range: p.size-1, force:5},
+						  ];
+		particles.push(p);
 	}
 	// Listen for animate update
 	app.ticker.add(function(delta) {
